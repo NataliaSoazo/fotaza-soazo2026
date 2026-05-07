@@ -20,5 +20,10 @@ app.use(express.static('public'));
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'vistas', 'Home', 'inicio.html'));
 });
-
+app.get('/registro', (req, res) => {
+  res.sendFile(path.join(__dirname, 'vistas', 'Home', 'registro.html'));
+});
+app.get('/ingreso', (req, res) => {
+  res.sendFile(path.join(__dirname, 'vistas', 'Home', 'ingreso.html'));
+});
 app.listen(3030, () => { console.log("corriendo") });
