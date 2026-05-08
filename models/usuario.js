@@ -74,5 +74,7 @@ import { sequelize } from './conexion.js';
   }, {
     sequelize,
     modelName: 'Usuario',
+    tableName:'usuario',
+    timestamps: true
   });
 export{Usuario};
