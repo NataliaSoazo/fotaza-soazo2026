@@ -1,5 +1,5 @@
 import { Model,DataTypes } from 'sequelize';
-import { sequelize } from './conexion.js';
+import { sequelizeFotaza } from './conexion.js';
 
   class Publicacion extends Model {
     
@@ -11,7 +11,7 @@ import { sequelize } from './conexion.js';
       autoIncrement:true
     },
     fecha:{
-    type: DATEONLY,
+    type: DataTypes,
     allowNull:false
     },
     titulo:{
@@ -25,9 +25,6 @@ import { sequelize } from './conexion.js';
     isClose:{
           type:DataTypes.BOOLEAN,
           allowNull:true
-        },
-    cantDenuncias:{
-        type:DataTypes.INTEGER
     },
     idUsuario:{
       type:DataTypes.INTEGER,
@@ -35,14 +32,6 @@ import { sequelize } from './conexion.js';
       model: 'Usuario', // nombre de la tabla Usuario
       key: 'id'
     }
-    },
-    createdBy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    updatedBy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
     },
     deletedBy: {
       type: DataTypes.INTEGER,
@@ -54,16 +43,11 @@ import { sequelize } from './conexion.js';
     }
     
   }, {
-    sequelize,
-    modelName: 'Publicacion',
+    sequelize: sequelizeFotaza,
+    modelName: 'publicacion',
     tableName:'publicacion',
-    timestamps: true
+    timestamps: false
   });
 export{Publicacion};
 
 
-
-Publicacion.belongsToMany(Etiqueta, {
-  through: EtiquetaPublicacion,
-  foreignKey: 'idPublicacion'
-});

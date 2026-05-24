@@ -1,5 +1,5 @@
 import { Model,DataTypes } from 'sequelize';
-import { sequelize } from './conexion.js';
+import { sequelizeFotaza } from './conexion.js';
 
   class Imagen extends Model {
     
@@ -47,9 +47,9 @@ import { sequelize } from './conexion.js';
     }
     
   }, {
-    sequelize,
-    modelName: 'Imagen',
+    sequelize: sequelizeFotaza,
+    modelName: 'imagen',
     tableName:'imagen',
-    timestamps: true
+    timestamps: false
   });
 export{Imagen};

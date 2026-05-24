@@ -1,5 +1,5 @@
 import { Model,DataTypes } from 'sequelize';
-import { sequelize } from './conexion.js';
+import { sequelizeFotaza } from './conexion.js';
 
   class Usuario extends Model {
     
@@ -22,8 +22,9 @@ import { sequelize } from './conexion.js';
     nick:{
       type:DataTypes.STRING,
       allowNull:false,
+      unique: true
     },
-    clave:{
+    password:{
       type:DataTypes.STRING,
       allowNull:false,
     
@@ -35,15 +36,12 @@ import { sequelize } from './conexion.js';
     telefono:{
       type:DataTypes.STRING,
       allowNull:false,
-    },
-    clave:{
-      type:DataTypes.STRING,
-      allowNull:false,
-    
+      unique: true,
     },
     mail:{
       type:DataTypes.STRING,
       allowNull:false,
+      unique: true,
     },
     urlAvatar:{
       type:DataTypes.STRING,
@@ -54,14 +52,6 @@ import { sequelize } from './conexion.js';
       type:DataTypes.BOOLEAN,
       allowNull:false
     },
-    createdBy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    updatedBy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
     deletedBy: {
       type: DataTypes.INTEGER,
       allowNull: true,
@@ -70,11 +60,11 @@ import { sequelize } from './conexion.js';
       type: DataTypes.DATE,
     allowNull: true,
     }
-    
+
   }, {
-    sequelize,
-    modelName: 'Usuario',
+    sequelize: sequelizeFotaza,
+    modelName: 'usuario',
     tableName:'usuario',
-    timestamps: true
+    timestamps: false
   });
 export{Usuario};
