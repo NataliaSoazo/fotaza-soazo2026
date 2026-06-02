@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { Usuario } from '../models/usuario.js';
+import { Imagen } from '../models/imagen.js';
 import bcrypt from "bcrypt";
 const router = Router();
 
@@ -87,11 +88,10 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/nuevaPublicacion', (req, res) => {
-
+router.get('/nuevaPublicacion', async (req, res) => {
     try {
 
-        const user = req.session.user;
+        const  user =await  req.session.user;
 
         // validar sesión
         if (!user) {
@@ -110,6 +110,17 @@ router.get('/nuevaPublicacion', (req, res) => {
 
 });
 
-
+router.get('/todasLasPublicaciones', async(req,res)=>{
+  const user = req.session.user;
+  try {
+    if(user){
+      const imagenes = await Imagen.findAll({attributes: ['id', 'urlImagen']});
+      console.log(imagenes);
+      res.render('Usuario/verTodo', {user, imagenes});
+    }
+  } catch (error) {
+    res.send('Error al solicitar la página');
+  }
+})
 
 export default router;

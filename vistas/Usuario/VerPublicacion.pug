@@ -1,0 +1,43 @@
+extends ./HomeUsuario
+
+block content
+
+    .container.mt-5
+    
+          .card.shadow
+    
+            .card-body
+    
+              h1.text-center.mb-4= publicacion.titulo
+    
+              p.lead= publicacion.descripcion
+    
+              p.text-muted
+                | Publicado por:
+                b #{publicacion.Usuario.nombre}
+    
+              hr
+    
+              h3 Etiquetas
+    
+              .mb-4
+                each etiqueta in publicacion.Etiquetas
+                  span.badge.bg-primary.me-2
+                    | ##{etiqueta.nombre}
+    
+              hr
+    
+              h3 Imágenes
+    
+              .row
+    
+                each imagen in publicacion.Imagens
+    
+                  .col-md-4.mb-4
+    
+                    .card
+    
+                      img.card-img-top(
+                        src=`/${imagen.urlImagen}`
+                        style="height:300px; object-fit:cover;"
+                      )

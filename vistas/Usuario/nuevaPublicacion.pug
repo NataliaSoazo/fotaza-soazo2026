@@ -33,7 +33,30 @@ block content
             rows="4"
             required
           )
+        .mb-3
+          label.form-label Etiquetas (Tags)
 
+          input.form-control(
+            type="text"
+            name="etiqueta"
+            placeholder="Playa, Noche, Deportes"
+            required
+          )
+          br
+          .form-check
+            input.form-check-input(
+            type="checkbox",
+            id="copyright",
+            name="copyright"
+          )
+            label.form-check-label(for="copyright")
+            La imagen tiene copyright
+          .mb-3
+          input.form-control(
+            type="text"
+            name="frase"
+            placeholder='Iniciales watermark, sólo si tienes copyright'
+          )
         .mb-3
           label.form-label 
           b Imágenes: 
@@ -63,7 +86,3 @@ block content
   script(
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
   )
-
-    script(
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    )

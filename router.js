@@ -4,6 +4,9 @@ import express from 'express';
 import session from 'express-session';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {Voto} from './models/voto.js';
+import {Comenta} from './models/comenta.js';
+import {Denuncia} from './models/denuncia.js';
 const app = express();
 app.set('view engine', 'pug');
 app.set('views', './vistas');
@@ -25,6 +28,7 @@ app.use(express.static('public'));
 // Rutas
 app.use(rutaUsuario);
 app.use(rutaPublicacion);
+app.use('/uploads', express.static('uploads'));
 // Vistas
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'vistas', 'Home', 'inicio.html'));

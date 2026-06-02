@@ -1,6 +1,6 @@
 import { Model,DataTypes } from 'sequelize';
 import { sequelizeFotaza } from './conexion.js';
-
+import { EtiquetaPublicacion } from './etiquetaPublicacion.js';
   class Publicacion extends Model {
     
   }
@@ -11,7 +11,7 @@ import { sequelizeFotaza } from './conexion.js';
       autoIncrement:true
     },
     fecha:{
-    type: DataTypes,
+    type: DataTypes.DATE,
     allowNull:false
     },
     titulo:{
@@ -22,6 +22,11 @@ import { sequelizeFotaza } from './conexion.js';
     type:DataTypes.STRING,
     allowNull:false
     },
+    copyright: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+    },
     isClose:{
           type:DataTypes.BOOLEAN,
           allowNull:true
@@ -29,24 +34,19 @@ import { sequelizeFotaza } from './conexion.js';
     idUsuario:{
       type:DataTypes.INTEGER,
       references: {
-      model: 'Usuario', // nombre de la tabla Usuario
+      model: 'usuarios', // nombre de la tabla Usuario
       key: 'id'
     }
     },
-    deletedBy: {
+    deletedBy:{
       type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    deletedAt:{
-      type: DataTypes.DATE,
     allowNull: true,
     }
-    
   }, {
     sequelize: sequelizeFotaza,
-    modelName: 'publicacion',
-    tableName:'publicacion',
-    timestamps: false
+    modelName: 'Publicacion',
+    tableName:'publicaciones',
+    timestamps: true,
   });
 export{Publicacion};
 

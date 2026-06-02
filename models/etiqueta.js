@@ -1,10 +1,11 @@
 import { Model,DataTypes } from 'sequelize';
-import { sequelize } from './conexion.js';
-
+import { sequelizeFotaza } from './conexion.js';
+import { Publicacion } from './publicacion.js';
+import { EtiquetaPublicacion } from './etiquetaPublicacion.js';
   class Etiqueta extends Model {
     
   }
-  Imagen.init({
+  Etiqueta.init({
     id:{
       type:DataTypes.INTEGER,
       primaryKey:true,
@@ -14,33 +15,14 @@ import { sequelize } from './conexion.js';
     type:DataTypes.STRING,
     allowNull:false
     },
-    createdBy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    updatedBy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    deletedBy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    deletedAt:{
-      type: DataTypes.DATE,
-    allowNull: true,
+    createdBy:{
+      type:DataTypes.INTEGER,
     }
-    
   }, {
-    sequelize,
+    sequelize: sequelizeFotaza,
     modelName: 'Etiqueta',
-    tableName:'etiqueta',
-    timestamps: true
+    tableName:'etiquetas',
+    timestamps: false
   });
-  // metodo para que se entienda que la relación es de muchos a muchos
-  Etiqueta.belongsToMany(Publicacion, {
-  through: EtiquetaPublicacion,
-  foreignKey: 'idEtiqueta'
-});
 
 export{Etiqueta};

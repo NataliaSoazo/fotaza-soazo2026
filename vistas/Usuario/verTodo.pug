@@ -1,0 +1,31 @@
+extends ./HomeUsuario
+
+block content
+    .row 
+        .col-3
+        .col-3 
+          #carouselFotos.carousel.slide(data-bs-ride="carousel")
+            .carousel-inner
+    
+                each imagen, index in imagenes
+                  .carousel-item(class=index === 0 ? 'active' : '')
+                    a(href=`/imagen/${imagen.id}`)
+                      img.d-block.w-100(
+                        src=`/${imagen.urlImagen}`
+                        alt="Imagen"
+                      )
+    
+            button.carousel-control-prev(
+              type="button"
+              data-bs-target="#carouselFotos"
+              data-bs-slide="prev"
+            )
+              span.carousel-control-prev-icon
+            
+            button.carousel-control-next(
+              type="button"
+              data-bs-target="#carouselFotos"
+              data-bs-slide="next"
+            )
+        span.carousel-control-next-icon
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js")

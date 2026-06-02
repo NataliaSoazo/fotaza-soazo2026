@@ -18,38 +18,24 @@ import { sequelizeFotaza } from './conexion.js';
     type:DataTypes.STRING,
     allowNull:false
     },
-    marcaDeAgua:{
-    type:DataTypes.STRING,
-    allowNull:false
+    idPublicacion:{
+      type:DataTypes.INTEGER,
+      references: {
+      model: 'publicaciones', // nombre de la tabla Usuario
+      key: 'id'
+    }
     },
     idUsuario:{
       type:DataTypes.INTEGER,
       references: {
-      model: 'Usuario', // nombre de la tabla Usuario
+      model: 'usuarios', // nombre de la tabla Usuario
       key: 'id'
     }
     },
-    createdBy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    updatedBy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    deletedBy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    deletedAt:{
-      type: DataTypes.DATE,
-    allowNull: true,
-    }
-    
   }, {
     sequelize: sequelizeFotaza,
-    modelName: 'imagen',
-    tableName:'imagen',
-    timestamps: false
+    modelName: 'Imagen',
+    tableName:'imagenes',
+    timestamps: true,
   });
 export{Imagen};

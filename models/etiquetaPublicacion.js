@@ -1,54 +1,39 @@
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from './conexion.js';
+import { sequelizeFotaza } from './conexion.js';
 
 class EtiquetaPublicacion extends Model {}
 
 EtiquetaPublicacion.init({
-  
-  idEtiqueta: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'Etiquetas', // nombre de la tabla Etiqueta
-      key: 'id'
+
+    id:{
+        type:DataTypes.INTEGER,
+        primaryKey:true,
+        autoIncrement:true
+    },
+
+    idPublicacion:{
+        type:DataTypes.INTEGER,
+        references:{
+            model:'publicaciones',
+            key:'id'
+        },
+    allowNull: false
+    },
+
+    idEtiqueta:{
+        type:DataTypes.INTEGER,
+        references:{
+            model:'etiquetas',
+            key:'id'
+        },
+    allowNull: false
     }
-  },
 
-  idPublicacion: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'Publicacion', // nombre de la tabla Publicacion
-      key: 'id'
-    }
-  },
-
-  createdBy: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-  },
-
-  updatedBy: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-  },
-
-  deletedBy: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-  },
-
-  deletedAt: {
-    type: DataTypes.DATE,
-    allowNull: true,
-  }
-
-}, {
-  sequelize,
-  modelName: 'EtiquetaPublicacion',
-  tableName: 'etiqueta_publicacion',
-  timestamps: true,
-  paranoid: true
+},{
+    sequelize: sequelizeFotaza,
+    modelName: 'EtiquetaPublicacion',
+    tableName:'etiquetapublicacions',
+    timestamps:false
 });
 
 export { EtiquetaPublicacion };

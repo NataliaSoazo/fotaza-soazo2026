@@ -52,19 +52,21 @@ import { sequelizeFotaza } from './conexion.js';
       type:DataTypes.BOOLEAN,
       allowNull:false
     },
-    deletedBy: {
+    createdBy: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    deletedAt:{
-      type: DataTypes.DATE,
+    deletedBy:{
+      type: DataTypes.INTEGER,
     allowNull: true,
     }
 
   }, {
     sequelize: sequelizeFotaza,
-    modelName: 'usuario',
-    tableName:'usuario',
-    timestamps: false
+    modelName: 'Usuario', //nombre del modelo
+   // schema: usuario (nombre de la tabla en la bd), wi no se le coloca, le pone el nombre del modelo + "s"
+   // con todos los atributos
+    tableName:'usuarios',
+    timestamps: true,
   });
 export{Usuario};

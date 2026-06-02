@@ -1,5 +1,5 @@
 import { Model,DataTypes } from 'sequelize';
-import { sequelize } from './conexion.js';
+import { sequelizeFotaza } from './conexion.js';
 
   class Comenta extends Model {
     
@@ -11,14 +11,14 @@ import { sequelize } from './conexion.js';
       autoIncrement:true
     },
     fecha:{
-    type: DATEONLY,
-    allowNull:false
+      type:DataTypes.DATEONLY,
+      allowNull:false
     },
     idImagen:{
     type:DataTypes.INTEGER,
     allowNull:false,
       references: {
-      model: 'Imagen', // nombre de la tabla Imagen
+      model: 'imagenes', // nombre de la tabla Imagen
       key: 'id'   
         },
       },
@@ -29,29 +29,12 @@ import { sequelize } from './conexion.js';
     idUsuario:{
       type:DataTypes.INTEGER,
       references: {
-      model: 'Usuario', // nombre de la tabla Usuario
+      model: 'usuarios', // nombre de la tabla Usuario
       key: 'id'
     }
     },
-    createdBy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    updatedBy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    deletedBy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    deletedAt:{
-      type: DataTypes.DATE,
-    allowNull: true,
-    }
-    
   }, {
-    sequelize,
+    sequelize: sequelizeFotaza,
     modelName: 'Comenta',
     tableName:'comenta',
     timestamps: true
