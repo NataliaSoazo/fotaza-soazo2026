@@ -1,5 +1,6 @@
 import rutaUsuario from './routes/rutaUsuario.js';
 import rutaPublicacion from './routes/rutaPublicacion.js';
+import rutaImagen from './routes/rutaImagen.js';
 import express from 'express';
 import session from 'express-session';
 import path from 'path';
@@ -7,6 +8,12 @@ import { fileURLToPath } from 'url';
 import {Voto} from './models/voto.js';
 import {Comenta} from './models/comenta.js';
 import {Denuncia} from './models/denuncia.js';
+import { Etiqueta } from './models/etiqueta.js';
+import { Publicacion } from './models/publicacion.js';
+import { EtiquetaPublicacion } from './models/etiquetaPublicacion.js';
+import './models/relaciones.js';
+import { Imagen } from './models/imagen.js';
+import { Sequelize } from 'sequelize';
 const app = express();
 app.set('view engine', 'pug');
 app.set('views', './vistas');
@@ -28,10 +35,51 @@ app.use(express.static('public'));
 // Rutas
 app.use(rutaUsuario);
 app.use(rutaPublicacion);
+app.use(rutaImagen);
 app.use('/uploads', express.static('uploads'));
 // Vistas
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'vistas', 'Home', 'inicio.html'));
+app.get('/', async (req, res) => {
+  const etiquetas = await Etiqueta.findAll({
+    include: [{
+        model: EtiquetaPublicacion,
+        required: true,
+        include: [{
+            model: Publicacion,
+            required: true,
+            where: {
+                copyright: false
+            }
+        }]
+    }]
+    });
+    const imagenes = await Imagen.findAll({
+    include:[
+        {
+            model: Publicacion,
+            where:{
+                copyright:false
+            }
+        },
+        {
+            model: Voto,
+            attributes:[]
+        }
+    ],
+    attributes:{
+        include:[
+            [
+                Sequelize.fn('COUNT', Sequelize.col('Votos.id')),
+                'cantidadVotos'
+            ]
+        ]
+    },
+    group:['Imagen.id'],
+    order:[
+        [Sequelize.literal('cantidadVotos'),'DESC']
+    ]
+});
+
+  res.render('Home/inicio',{etiquetas, imagenes});
 });
 
 app.get('/registro', (req, res) => {

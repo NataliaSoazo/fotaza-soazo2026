@@ -4,11 +4,8 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
-    link(
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    )
-
+    link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet")
+    link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
     link(rel="stylesheet" href="/public/css/css.css")
 
     title Document
@@ -34,7 +31,7 @@ html(lang="en")
               li.nav-item.me-2
                 form(action="/todasLasPublicaciones" method="GET")
                   button.btn.btn-outline-success(type="submit")
-                    | Home
+                    | Ver todas las imagenes publicadas
 
               li.nav-item
                 form(action="/nuevaPublicacion" method="GET")

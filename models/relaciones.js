@@ -78,3 +78,17 @@ Comenta.hasMany(Imagen,{
 Imagen.belongsTo(Comenta,{
     foreignKey:'idImagen'
 });
+Etiqueta.hasMany(EtiquetaPublicacion,{
+    foreignKey:'idEtiqueta'
+});
+
+EtiquetaPublicacion.belongsTo(Etiqueta,{
+    foreignKey:'idEtiqueta'
+});
+Publicacion.hasMany(EtiquetaPublicacion,{
+    foreignKey:'idPublicacion'
+});
+
+EtiquetaPublicacion.belongsTo(Publicacion,{
+    foreignKey:'idPublicacion'
+});

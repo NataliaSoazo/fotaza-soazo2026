@@ -101,7 +101,7 @@ async function aplicarMarcaDeAgua(rutaImagen, texto) {
 <svg width="${ancho}" height="${alto}">
     <style>
         .titulo {
-            fill: rgba(255,255,255,0.15);
+            fill: rgba(204, 238, 9, 0.15);
             font-size: ${Math.floor(ancho / 4)}px;
             font-weight: bold;
         }
