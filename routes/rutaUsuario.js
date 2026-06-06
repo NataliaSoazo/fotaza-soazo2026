@@ -1,7 +1,11 @@
 import { Router } from 'express';
 import { Usuario } from '../models/usuario.js';
 import { Imagen } from '../models/imagen.js';
+import {Etiqueta} from '../models/etiqueta.js';
+import { Publicacion } from '../models/publicacion.js';
+import { Voto } from '../models/voto.js';
 import bcrypt from "bcrypt";
+import { Sequelize } from 'sequelize';
 const router = Router();
 
 router.post("/registro", async (req, res) => {
@@ -74,7 +78,7 @@ router.post('/login', async (req, res) => {
       const user = await req.session.user;
       req.session.save();
       if (user.role == "Usuario") {
-          res.render('Usuario/HomeUsuario', { user });
+          res.redirect('HomeUsuario');
       } else {
         res.render('Home/Ingreso', { user });
       }
@@ -86,6 +90,46 @@ router.post('/login', async (req, res) => {
     res.status(401).json({ error: "El usuario no existe" });
     res.render('Home/ingreso');
   }
+});
+
+router.get('/HomeUsuario',async(req , res)=>{
+   try {
+      const user = req.session.user;
+      if(!user){
+        return res.redirect('/');
+      }
+      const etiquetas = await Etiqueta.findAll();
+    const imagenes = await Imagen.findAll({
+    include:[
+        {
+            model: Publicacion,
+            where:{
+                copyright:false
+            }
+        },
+        {
+            model: Voto,
+            attributes:[]
+        }
+    ],
+    attributes:{
+        include:[
+            [
+                Sequelize.fn('COUNT', Sequelize.col('Votos.id')),
+                'cantidadVotos'
+            ]
+        ]
+    },
+    group:['Imagen.id'],
+    order:[
+        [Sequelize.literal('cantidadVotos'),'DESC']
+    ]
+   });
+    res.render('Usuario/verTodos', {user, imagenes, etiquetas})
+   } catch (error) {
+    console.log(error);
+    res.status(500).send("Error al cargar la página");
+   }
 });
 
 router.get('/nuevaPublicacion', async (req, res) => {

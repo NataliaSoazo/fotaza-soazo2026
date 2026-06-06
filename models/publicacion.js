@@ -20,7 +20,7 @@ import { EtiquetaPublicacion } from './etiquetaPublicacion.js';
     },
     descripcion:{
     type:DataTypes.STRING,
-    allowNull:false
+    allowNull:true
     },
     copyright: {
         type: DataTypes.BOOLEAN,

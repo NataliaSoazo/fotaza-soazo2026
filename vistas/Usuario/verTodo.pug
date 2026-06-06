@@ -74,18 +74,18 @@ block content
                   .col-12  
                   div.modal-footer
                     button(type="submit" class="btn btn-primary") Enviar comentario
-                    button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Close                  
-    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js")
+                    button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Close 
 
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js")  
     script.
-         function Votar(idVotada) {
-          document.querySelector("#idVotada").value = idVotada;
-          var myModal = new bootstrap.Modal(document.getElementById('votar'));
-          myModal.show();
-         }
+      function Votar(idVotada) {
+      document.querySelector("#idVotada").value = idVotada;
+      var myModal = new bootstrap.Modal(document.getElementById('votar'));
+      myModal.show();
+      }
     script.
-         function Comentar(idComentario) {
-          document.querySelector("#idComentario").value = idComentario;
-          var myModal = new bootstrap.Modal(document.getElementById('comentar'));
-          myModal.show();
-         }
+      function Comentar(idComentario) {
+      document.querySelector("#idComentario").value = idComentario;
+      var myModal = new bootstrap.Modal(document.getElementById('comentar'));
+      myModal.show();
+      }
