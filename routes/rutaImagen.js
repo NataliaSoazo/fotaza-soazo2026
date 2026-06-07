@@ -1,12 +1,13 @@
 import { Router } from 'express';
 import { Usuario } from '../models/usuario.js';
 import { Imagen } from '../models/imagen.js';
-import {Voto} from '../models/voto.js';
-import{Comenta} from '../models/comenta.js';
+import { Voto} from '../models/voto.js'; 
+import {Comenta} from '../models/comenta.js';
 import { Etiqueta } from '../models/etiqueta.js';
 import { EtiquetaPublicacion } from '../models/etiquetaPublicacion.js';
 import { Model } from 'sequelize';
 import { Publicacion } from '../models/publicacion.js';
+import { Denuncia } from '../models/denuncia.js';
 
 
 
@@ -21,7 +22,8 @@ router.post('/votar-imagen', async (req, res) => {
         }
         const existeVoto = await Voto.findOne({where: {idImagen: req.body.idVotada, idUsuario:user.id}})
             if (existeVoto){
-               return res.send("Ya  votaste esta imagen");
+               req.session.mensaje = "Ya votaste esta imagen";
+                return res.redirect(`/imagen/${req.body.idVotada}`);
             }
             const datos = {
                 fecha: new Date(),
@@ -30,8 +32,8 @@ router.post('/votar-imagen', async (req, res) => {
                 idUsuario: user.id,
             }
             const voto = await Voto.create(datos);
-           // el acvivedId permite que se vuelva cargar la imagen que se comentó
-            res.redirect(`/todasLasPublicaciones?activeId=${req.body.id}`);
+            req.session.mensaje = "Voto enviado!";
+            res.redirect(`/imagen/${req.body.idVotada}`);
     } catch (error) {
         console.error(error); 
         res.status(500).send('Error al procesar el voto');
@@ -62,9 +64,9 @@ router.post('/comentar-imagen', async (req, res) => {
 router.get('/imagen/:id', async (req, res) => {
     try {
         const user = req.session.user;
-        if(!user){
+        /*if(!user){
             return res.redirect('/');
-        }
+        }*/
         const id = req.params.id;
         const imagen = await Imagen.findOne(
             {where:{
@@ -90,7 +92,9 @@ router.get('/imagen/:id', async (req, res) => {
           cantVotantes > 0
         ? sumaDeVotos / cantVotantes
         : 0;
-        res.render('Imagen/imagenIndividual', {imagen, comentarios, promedioVotos,cantVotantes, user, usuario });
+        const mensaje = req.session.mensaje;
+        req.session.mensaje = null;
+        res.render('Imagen/imagenIndividual', {imagen, comentarios, promedioVotos,cantVotantes, user, usuario,mensaje  });
     } catch (error) {
         console.log(error);
         res.status(500).send(error);
@@ -137,4 +141,30 @@ router.get('/etiqueta/:id', async (req, res) => {
         res.status(500).send(error);
     }
 });
+
+router.post('/denunciar-imagen', async (req, res) => {
+    try {
+        const user = req.session.user;
+        if(!user){
+            return res.redirect('/');
+        }
+        const denuncia ={
+            fecha: new Date(),
+            idImagen : req.body.idDenunciada,
+            motivo : req.body.m,
+            descripcion: req.body.d,
+            idUsuario: user.id
+        }
+        Denuncia.create(denuncia);
+        const imagen = await Imagen.findOne({where:{id:req.body.idDenunciada}});
+
+        await Publicacion.update({ denunciada: true },{where: {id: imagen.idPublicacion}});
+        req.session.mensaje = 'Su denuncia fue registrada correctamente';
+        res.redirect(`/imagen/${req.body.idDenunciada}?mensaje:"Su denuncia fué enviada correctamente`);
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+})
 export default router;

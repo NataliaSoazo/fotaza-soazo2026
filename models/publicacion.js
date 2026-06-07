@@ -29,7 +29,13 @@ import { EtiquetaPublicacion } from './etiquetaPublicacion.js';
     },
     isClose:{
           type:DataTypes.BOOLEAN,
-          allowNull:true
+          allowNull:true,
+          defaultValue: false
+    },
+     denunciada:{
+          type:DataTypes.BOOLEAN,
+          allowNull:true,
+          defaultValue: false
     },
     idUsuario:{
       type:DataTypes.INTEGER,

@@ -160,7 +160,7 @@ router.get('/todasLasPublicaciones', async(req,res)=>{
     if(user){
       const imagenes = await Imagen.findAll({attributes: ['id', 'urlImagen']});
       console.log(imagenes);
-      res.render('Usuario/verTodo', {user, imagenes});
+      res.render('Usuario/verTodos', {user, imagenes});
     }
   } catch (error) {
     res.send('Error al solicitar la página');
