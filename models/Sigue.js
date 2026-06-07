@@ -1,7 +1,9 @@
-import { DataTypes } from 'sequelize';
-import { sequelizeFotaza } from '../config/db.js';
+import { Model,DataTypes } from 'sequelize';
+import { sequelizeFotaza } from './conexion.js';
 
-const Sigue = sequelizeFotaza.define('Sigue', {
+class Sigue extends Model {}
+
+Sigue.init({
 id: {
 type: DataTypes.INTEGER,
 primaryKey: true,
@@ -20,8 +22,9 @@ type: DataTypes.DATE,
 allowNull: false
 }
 }, {
-tableName: 'sigue',
-timestamps: false
+    sequelize: sequelizeFotaza,
+    tableName: 'sigue',
+    timestamps: false
 });
 
-export default Sigue;
+export {Sigue};

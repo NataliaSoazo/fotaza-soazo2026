@@ -1,6 +1,7 @@
 import rutaUsuario from './routes/rutaUsuario.js';
 import rutaPublicacion from './routes/rutaPublicacion.js';
 import rutaImagen from './routes/rutaImagen.js';
+import rutaSigue from './routes/rutaSigue.js';
 import express from 'express';
 import session from 'express-session';
 import path from 'path';
@@ -11,6 +12,7 @@ import {Denuncia} from './models/denuncia.js';
 import { Etiqueta } from './models/etiqueta.js';
 import { Publicacion } from './models/publicacion.js';
 import { EtiquetaPublicacion } from './models/etiquetaPublicacion.js';
+import {Sigue} from './models/sigue.js';
 import './models/relaciones.js';
 import { Imagen } from './models/imagen.js';
 import { Sequelize } from 'sequelize';
@@ -36,6 +38,7 @@ app.use(express.static('public'));
 app.use(rutaUsuario);
 app.use(rutaPublicacion);
 app.use(rutaImagen);
+app.use(rutaSigue);
 app.use('/uploads', express.static('uploads'));
 // Vistas
 app.get('/', async (req, res) => {

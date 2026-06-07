@@ -8,7 +8,7 @@ import { EtiquetaPublicacion } from '../models/etiquetaPublicacion.js';
 import { Model } from 'sequelize';
 import { Publicacion } from '../models/publicacion.js';
 import { Denuncia } from '../models/denuncia.js';
-
+import {Sigue } from '../models/sigue.js';
 
 
 const router = Router();
@@ -64,9 +64,9 @@ router.post('/comentar-imagen', async (req, res) => {
 router.get('/imagen/:id', async (req, res) => {
     try {
         const user = req.session.user;
-        /*if(!user){
+        if(!user){
             return res.redirect('/');
-        }*/
+        }
         const id = req.params.id;
         const imagen = await Imagen.findOne(
             {where:{
@@ -93,8 +93,10 @@ router.get('/imagen/:id', async (req, res) => {
         ? sumaDeVotos / cantVotantes
         : 0;
         const mensaje = req.session.mensaje;
+        let verif = await verificarEstadoDeUsuarios(user.id, imagen.idUsuario);
+        console.log("VERIF =", verif);
         req.session.mensaje = null;
-        res.render('Imagen/imagenIndividual', {imagen, comentarios, promedioVotos,cantVotantes, user, usuario,mensaje  });
+        res.render('Imagen/imagenIndividual', {imagen, comentarios, promedioVotos,cantVotantes, user, usuario,mensaje, verif  });
     } catch (error) {
         console.log(error);
         res.status(500).send(error);
@@ -159,6 +161,13 @@ router.post('/denunciar-imagen', async (req, res) => {
         const imagen = await Imagen.findOne({where:{id:req.body.idDenunciada}});
 
         await Publicacion.update({ denunciada: true },{where: {id: imagen.idPublicacion}});
+
+        const cantidadDenunciadas = await Publicacion.count({where: 
+            {idUsuario: imagen.idUsuario,denunciada: true}});
+
+            if (cantidadDenunciadas >= 3) {
+        await Usuario.update({ anulado: true },{ where: {id:imagen.idUsuario} });
+            }
         req.session.mensaje = 'Su denuncia fue registrada correctamente';
         res.redirect(`/imagen/${req.body.idDenunciada}?mensaje:"Su denuncia fué enviada correctamente`);
         
@@ -166,5 +175,34 @@ router.post('/denunciar-imagen', async (req, res) => {
         console.log(error);
         res.status(500).send(error);
     }
-})
+});
+
+router.get('/vertodaPublicacion/:id', async(req ,res)=>{
+    try {
+        const user = req.session.user;
+        if(!user){
+        return res.redirect('/');
+    }
+    const imagen =await Imagen.findOne({where:{id: req.params.id}});
+    const imagenes = await Imagen.findAll({where:{idPublicacion: imagen.idPublicacion}});
+    const publicacion= await Publicacion.findByPk(imagen.idPublicacion);
+    res.render('Usuario/verPublCompleta', {imagenes, publicacion, user});
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+});
+
+
 export default router;
+
+
+async function verificarEstadoDeUsuarios(idUser, idDuenoImagen){
+  const yaSigue= await Sigue.findOne({where:{idSeguidor:idUser, idSeguido:idDuenoImagen}});
+   if(yaSigue){
+    return true
+   }
+   else{
+    return false;
+   }
+}

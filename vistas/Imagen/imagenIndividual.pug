@@ -27,24 +27,37 @@ block content
       h3.text-center INFORMACION DE LA IMAGEN
       br
       h6.card-title= PUBLICACION
-        h5 Nombre de la imagen: #{imagen.Publicacion.titulo}
+        h5 
+          |Título de la publicación: #{imagen.Publicacion.titulo}
+          a.mx-2(href=`/vertodaPublicacion/${imagen.id}`)
+            i.fa.fa-arrow-right(title="VER TODAS LAS IMAGENES DE ESTA PLUBLICACION" style="font-size:25px; color: black;")
         if user
           h6 Cantidad de votos: #{cantVotantes}
           h6 Estrellas: #{promedioVotos}
           h6
             | Publicada por : 
             b #{usuario.nick }
-            a.mx-2(href="#" onclick=`Seguir('${usuario.id}')`)
-                  i.fa.fa-star(title="SEGUIR" style="font-size:25px; color: black;")  
-          if comentarios && comentarios.length > 0
-            h4.mb-3 Comentarios
-
-          each comentario in comentarios
-            .card.rounded-
-              .card-body.border
-                h6.card-title.border.b=  comentario.Usuario.nick
-                  p.card-text= comentario.texto
-                  small.text-muted.border= comentario.fecha
+              if user.id !== usuario.id 
+                if verif===true
+                  a.mx-2(href=`/dejar-seguir/${usuario.id}/${imagen.id}`)
+                    i.fa.fa-check(
+                      title="SIGUIENDO, DEJAR DE SEGUIR?"
+                      style="font-size:25px; color: green;"
+                    )
+                else
+                  a.mx-2(href=`/seguir/${usuario.id}/${imagen.id}`)
+                    i.fa.fa-star(
+                      title="SEGUIR"
+                      style="font-size:25px; color: black;"
+                    )
+              if comentarios && comentarios.length > 0
+                h4.mb-3 Comentarios
+                  each comentario in comentarios
+                    .card.rounded-
+                      .card-body.border
+                        h6.card-title.border.b=  comentario.Usuario.nick
+                          p.card-text= comentario.texto
+                          small.text-muted.border= comentario.fecha
     .row
       .mt-4.text-center
         a.btn.btn-outline-primary(
