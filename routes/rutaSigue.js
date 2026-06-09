@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import {Sigue } from '../models/sigue.js';
+import { Model } from 'sequelize';
+import { Usuario } from '../models/usuario.js';
 
 const router = Router();
 
@@ -40,5 +42,56 @@ router.get('/dejar-seguir/:idUsuario/:idImagen',async(req ,res)=>{
     }
 });
 
+router.get('/meSiguen', async( req, res)=>{
+    try {
+        const user = req.session.user;
+    if(!user){
+        return res.redirect('/');
+    }
+    const meSiguen = await Sigue.findAll({
+        where:{ idSeguido: user.id},
+        include:[
+            {
+                model: Usuario,
+                as: 'Seguidor'
+            }
+        ]
+        });
 
+
+    res.render('Usuario/meSiguen', {meSiguen});
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+});
+
+
+
+
+router.get('/usuariosQueSigo', async( req, res)=>{
+    try {
+        const user = req.session.user;
+        if(!user){
+        return res.redirect('/');
+      }
+    
+     const yoSigo=  await Sigue.findAll({
+         where:{ idSeguidor: user.id},
+        include: [
+            {
+                model: Usuario,
+                as:'Seguido'
+            }
+        ]}
+    );
+    
+    console.log(JSON.stringify(yoSigo, null, 2));
+    res.render('Usuario/yoSigo', {yoSigo});
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+});
 export default router;

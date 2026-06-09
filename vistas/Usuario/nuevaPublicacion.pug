@@ -1,85 +1,85 @@
 extends ./HomeUsuario
 
 block content
-
-  .container.d-flex.justify-content-center.align-items-center.vh-100
-
-    .card.shadow.p-4(style="width: 400px;")
-      h3.text-center.mb-4 Nueva Publicación
-
-      // PREVIEWS
-      div#imgsPreview.d-flex.flex-wrap.mb-3
-
-      form(
-        action="/nuevaPublicacion"
-        method="POST"
-        enctype="multipart/form-data"
-      )
-
-        .mb-3
-          label.form-label Titulo
-
-          input.form-control(
-            type="text"
-            name="titulo"
-            required
-          )
-
-        .mb-3
-          label.form-label Descripción
-
-          textarea.form-control(
-            name="descripcion"
-            rows="4"
-          )
-        .mb-3
-          label.form-label Etiquetas (Tags)
-
-          input.form-control(
-            type="text"
-            name="etiqueta"
-            placeholder="Playa, Noche, Deportes"
-            required
-          )
-          br
-          .form-check
-            input.form-check-input(
-            type="checkbox",
-            id="copyright",
-            name="copyright"
-          )
-            label.form-check-label(for="copyright")
-            La imagen tiene copyright
-          .mb-3
-          input.form-control(
-            type="text"
-            name="frase"
-            placeholder='Iniciales watermark, sólo si tienes copyright'
-          )
-        .mb-3
-          label.form-label 
-          b Imágenes: 
-          i (Elige hasta 10 juntas)
-
-          input.form-control(
-            type="file"
-            id="img"
-            name="img"
-            accept="image/*"
-            multiple=true
-            required
-          )
-
-        // CONTENEDOR BASE64
-        div#imgsBase64
-
-        button.btn.btn-success.w-100(
-          type="submit"
+  if user
+    .container.d-flex.justify-content-center.align-items-center.vh-100
+  
+      .card.shadow.p-4(style="width: 400px;")
+        h3.text-center.mb-4 Nueva Publicación
+  
+        // PREVIEWS
+        div#imgsPreview.d-flex.flex-wrap.mb-3
+  
+        form(
+          action="/nuevaPublicacion"
+          method="POST"
+          enctype="multipart/form-data"
         )
-          | Subir
-
-        ul#errores.text-danger.mt-3
-
+  
+          .mb-3
+            label.form-label Titulo
+  
+            input.form-control(
+              type="text"
+              name="titulo"
+              required
+            )
+  
+          .mb-3
+            label.form-label Descripción
+  
+            textarea.form-control(
+              name="descripcion"
+              rows="4"
+            )
+          .mb-3
+            label.form-label Etiquetas (Tags)
+  
+            input.form-control(
+              type="text"
+              name="etiqueta"
+              placeholder="Playa, Noche, Deportes"
+              required
+            )
+            br
+            .form-check
+              input.form-check-input(
+              type="checkbox",
+              id="copyright",
+              name="copyright"
+            )
+              label.form-check-label(for="copyright")
+              La imagen tiene copyright
+            .mb-3
+            input.form-control(
+              type="text"
+              name="frase"
+              placeholder='Iniciales watermark, sólo si tienes copyright'
+            )
+          .mb-3
+            label.form-label 
+            b Imágenes: 
+            i (Elige hasta 10 juntas)
+  
+            input.form-control(
+              type="file"
+              id="img"
+              name="img"
+              accept="image/*"
+              multiple=true
+              required
+            )
+  
+          // CONTENEDOR BASE64
+          div#imgsBase64
+  
+          button.btn.btn-success.w-100(
+            type="submit"
+          )
+            | Subir
+  
+          ul#errores.text-danger.mt-3
+  
   script(src="/script.js")
 
   script(

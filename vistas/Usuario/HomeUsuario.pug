@@ -7,7 +7,24 @@ html(lang="en")
     link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet")
     link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
     link(rel="stylesheet" href="/public/css/css.css")
-
+    script(src="//cdn.datatables.net/2.1.8/js/dataTables.min.js")
+    script(src="//cdn.datatables.net/2.1.8/js/dataTables.min.js")
+    script.
+      $(document).ready(function(){
+      let table = new DataTable('#tableO');
+      });
+    script.
+      $(document).ready(function() {
+      let table = $('#table').DataTable();
+      $('.dataTables_paginate').addClass('no-print'); // Paginación
+      $('.dataTables_filter').addClass('no-print')
+      })
+    script.
+      $(document).ready(function(){
+      let table = new DataTable('#d');
+      $('.dataTables_paginate').addClass('no-print'); // Paginación
+      $('.dataTables_filter').addClass('no-print')
+      });
     title Document
   body
     .div-3
@@ -29,7 +46,7 @@ html(lang="en")
             ul.navbar-nav.me-auto.mb-2.mb-lg-0
 
               li.nav-item.me-2
-                form(action="/mi perfil" method="GET")
+                form(action="/miPerfil" method="GET")
                   button.btn.btn-outline-success(type="submit")
                     | Mi Perfil
 
@@ -37,7 +54,14 @@ html(lang="en")
                 form(action="/nuevaPublicacion" method="GET")
                   button.btn.btn-outline-success(type="submit")
                     | Nueva publicación
-
+              li.nav-item
+                form(action = '/usuariosQueSigo' method="GET")
+                  button.btn.btn-outline-success(type="submit")
+                    |  A quienes sigo
+              li.nav-item
+                form(action="/meSiguen" method="GET")
+                  button.btn.btn-outline-success(type="submit")
+                    | Quienes me siguen
             form.d-flex
               input.form-control.me-2(
                 type="search"

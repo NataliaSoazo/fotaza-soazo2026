@@ -6,6 +6,7 @@ import { Imagen } from './imagen.js';
 import { Voto } from './voto.js';
 import { Denuncia } from './denuncia.js';
 import { Comenta } from './comenta.js';
+import { Sigue } from './sigue.js';
 
 Usuario.hasMany(Publicacion,{
  foreignKey:'idUsuario'
@@ -89,3 +90,12 @@ foreignKey:'idImagen'
 Comenta.belongsTo(Imagen,{
 foreignKey:'idImagen'
 });
+/*
+los alias son distintos: están describiendo la misma relación 
+pero vista desde lados diferentes. belongsTo devuelve un único usuario, 
+mientras que hasMany devuelve muchas relaciones de seguimiento.*/
+Sigue.belongsTo(Usuario, { foreignKey:'idSeguidor', as:'Seguidor' });
+Sigue.belongsTo(Usuario, { foreignKey: 'idSeguido', as:'Seguido' });
+
+Usuario.hasMany(Sigue, {foreignKey:'idSeguidor', as:'Siguiendo' });
+Usuario.hasMany(Sigue, {foreignKey: 'idSeguido', as:'Seguidores' });

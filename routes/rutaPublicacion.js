@@ -59,6 +59,14 @@ router.post('/nuevaPublicacion', upload.array('img', 10), async (req, res) => {
         console.log(error);
         res.status(400).send("Error");
     }
+
+    router.get('/verSusPubl/:id', async(req, res)=>{
+        try {
+            
+        } catch (error) {
+            
+        }
+    })
 });
 
 function guardarImagen(file) {

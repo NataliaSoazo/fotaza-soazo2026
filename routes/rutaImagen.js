@@ -63,10 +63,10 @@ router.post('/comentar-imagen', async (req, res) => {
 });
 router.get('/imagen/:id', async (req, res) => {
     try {
-        const user = req.session.user;
-        if(!user){
+        const user = req.session.user || null;
+        /*if(!user){
             return res.redirect('/');
-        }
+        }*/
         const id = req.params.id;
         const imagen = await Imagen.findOne(
             {where:{
@@ -93,8 +93,11 @@ router.get('/imagen/:id', async (req, res) => {
         ? sumaDeVotos / cantVotantes
         : 0;
         const mensaje = req.session.mensaje;
-        let verif = await verificarEstadoDeUsuarios(user.id, imagen.idUsuario);
+        let verif = null
+        if (user!= null){
+        verif = await verificarEstadoDeUsuarios(user.id, imagen.idUsuario);
         console.log("VERIF =", verif);
+        }
         req.session.mensaje = null;
         res.render('Imagen/imagenIndividual', {imagen, comentarios, promedioVotos,cantVotantes, user, usuario,mensaje, verif  });
     } catch (error) {
@@ -179,10 +182,8 @@ router.post('/denunciar-imagen', async (req, res) => {
 
 router.get('/vertodaPublicacion/:id', async(req ,res)=>{
     try {
-        const user = req.session.user;
-        if(!user){
-        return res.redirect('/');
-    }
+        const user = req.session.user || null;
+    
     const imagen =await Imagen.findOne({where:{id: req.params.id}});
     const imagenes = await Imagen.findAll({where:{idPublicacion: imagen.idPublicacion}});
     const publicacion= await Publicacion.findByPk(imagen.idPublicacion);

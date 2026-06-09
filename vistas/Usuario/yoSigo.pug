@@ -1,0 +1,22 @@
+extends ./HomeUsuario
+
+block content
+  .row 
+    .col-2
+    .col-4
+      h4.text-center.p-5 USUARIOS  A QUIENES SIGUES
+      if yoSigo && yoSigo.length > 0
+              table.table.success#table.border.bg-secondary
+                thead
+                  tr
+                    th NICK          
+                    th.text-center ACCIONES                 
+                tbody
+                  each item in yoSigo
+                    tr
+                      td #{item.Seguido.nick}
+                      td.text-center
+                        a(href=`/verSusPubl/${item.Seguido.id}`)
+                          i.fa.fa-eye(title="VER PUBLICACIONES" style="font-size:25px; color: black;")
+      else
+          p No se encontraron seguidores.

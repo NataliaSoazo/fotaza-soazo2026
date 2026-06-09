@@ -14,10 +14,10 @@ block content
               style="max-height:800px; object-fit:contain;"    
           )  
           .mt-2.text-center
-            if user 
+            if user !== null
               a.mx-2(href="#" onclick=`Comentar('${imagen.id}')`)
                 i.fa.fa-commenting(title="COMENTAR" style="font-size:25px; color: primary;")
-              if user && user.id !== imagen.idUsuario
+              if user.id !== imagen.idUsuario
                 a.mx-2(href="#" onclick=`Votar('${imagen.id}')`)
                   i.fa.fa-star(title="VOTAR" style="font-size:25px; color: yellow;")  
                 a.mx-2(href="#" onclick=`Denunciar('${imagen.id}')`)
@@ -31,33 +31,33 @@ block content
           |Título de la publicación: #{imagen.Publicacion.titulo}
           a.mx-2(href=`/vertodaPublicacion/${imagen.id}`)
             i.fa.fa-arrow-right(title="VER TODAS LAS IMAGENES DE ESTA PLUBLICACION" style="font-size:25px; color: black;")
-        if user
+        if user!= null
           h6 Cantidad de votos: #{cantVotantes}
           h6 Estrellas: #{promedioVotos}
-          h6
-            | Publicada por : 
-            b #{usuario.nick }
-              if user.id !== usuario.id 
-                if verif===true
-                  a.mx-2(href=`/dejar-seguir/${usuario.id}/${imagen.id}`)
-                    i.fa.fa-check(
-                      title="SIGUIENDO, DEJAR DE SEGUIR?"
-                      style="font-size:25px; color: green;"
-                    )
-                else
-                  a.mx-2(href=`/seguir/${usuario.id}/${imagen.id}`)
-                    i.fa.fa-star(
-                      title="SEGUIR"
-                      style="font-size:25px; color: black;"
-                    )
-              if comentarios && comentarios.length > 0
-                h4.mb-3 Comentarios
-                  each comentario in comentarios
-                    .card.rounded-
-                      .card-body.border
-                        h6.card-title.border.b=  comentario.Usuario.nick
-                          p.card-text= comentario.texto
-                          small.text-muted.border= comentario.fecha
+          h6 
+              | Publicada por : 
+              b #{usuario.nick }
+                if user.id !== usuario.id 
+                  if verif===true
+                    a.mx-2(href=`/dejar-seguir/${usuario.id}/${imagen.id}`)
+                      i.fa.fa-check(
+                        title="SIGUIENDO, DEJAR DE SEGUIR?"
+                        style="font-size:25px; color: green;"
+                      )
+                  else
+                    a.mx-2(href=`/seguir/${usuario.id}/${imagen.id}`)
+                      i.fa.fa-star(
+                        title="SEGUIR"
+                        style="font-size:25px; color: black;"
+                      )
+                if comentarios && comentarios.length > 0
+                  h4.mb-3 Comentarios
+                    each comentario in comentarios
+                      .card.rounded-30
+                        .card-body.border
+                          h6.card-title.border.b=  comentario.Usuario.nick
+                            p.card-text= comentario.texto
+                            small.text-muted.border= comentario.fecha.toLocaleString()
     .row
       .mt-4.text-center
         a.btn.btn-outline-primary(

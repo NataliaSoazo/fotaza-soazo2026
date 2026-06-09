@@ -11,11 +11,19 @@ autoIncrement: true
 },
 idSeguidor: {
 type: DataTypes.INTEGER,
-allowNull: false
+allowNull: false,
+references: {
+      model: 'usuarios', // nombre de la tabla Usuario
+      key: 'id'
+    }
 },
 idSeguido: {
 type: DataTypes.INTEGER,
-allowNull: false
+allowNull: false,
+references: {
+      model: 'usuarios', // nombre de la tabla Usuario
+      key: 'id'
+    }
 },
 fecha: {
 type: DataTypes.DATE,

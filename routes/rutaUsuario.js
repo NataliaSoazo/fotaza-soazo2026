@@ -135,11 +135,11 @@ router.get('/HomeUsuario',async(req , res)=>{
 router.get('/nuevaPublicacion', async (req, res) => {
     try {
 
-        const  user =await  req.session.user;
+        const  user =req.session.user;
 
         // validar sesión
         if (!user) {
-            return res.redirect('Home/registro');
+            return res.redirect('/');
         }
 
         res.render('Usuario/nuevaPublicacion', { user });
@@ -166,5 +166,20 @@ router.get('/todasLasPublicaciones', async(req,res)=>{
     res.send('Error al solicitar la página');
   }
 })
+
+router.get('/miPerfil', async(req ,res)=>{
+  try {
+    const user = req.session.user;
+      if (!user){
+    return res.redirect('/');
+      }
+    const u = await  Usuario.findByPk(user.id);
+    res.render('Usuario/miperfil', {u});
+  } catch (error) {
+    console.log(error)
+    res.status(500).send(error);
+  }
+
+});
 
 export default router;
