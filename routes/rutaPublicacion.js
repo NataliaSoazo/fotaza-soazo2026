@@ -16,6 +16,11 @@ router.post('/nuevaPublicacion', upload.array('img', 10), async (req, res) => {
 
     try {
         const user = req.session.user;
+
+        if(!user){
+            return res.redirect('/');
+        }
+        let imagenesGuardadas = [];
         //Crear publicación
         const nuevaPublicacion = {
             fecha: new Date(),
@@ -32,42 +37,44 @@ router.post('/nuevaPublicacion', upload.array('img', 10), async (req, res) => {
         const imagenes = req.files;
 
         for (const file of imagenes) {
-
             const rutaImagen = guardarImagen(file);
-
             if (nuevaPublicacion.copyright) {
-                await aplicarMarcaDeAgua(rutaImagen,req.body.frase || 'FS'
-                );
+                await aplicarMarcaDeAgua(rutaImagen,req.body.frase || 'FS');
             }
-
             const nuevaImagen = {
                 urlImagen: rutaImagen,
-                licencia: nuevaPublicacion.copyright
-                    ? 'Copyright'
-                    : 'Default',
+                licencia: nuevaPublicacion.copyright? 'Copyright': 'Default',
                 idUsuario: user.id,
                 idPublicacion: publicacion.id
             };
 
-            await Imagen.create(nuevaImagen);
+         const imagen =    await Imagen.create(nuevaImagen);
+         imagenesGuardadas.push(imagen);
     }
             
-            res.render('Usuario/Homeusuario', { user });
+            res.render('Usuario/publicacionPosteada', {  publicacion, imagenesGuardadas });
 
     } catch (error) {
 
         console.log(error);
         res.status(400).send("Error");
     }
-
-    router.get('/verSusPubl/:id', async(req, res)=>{
-        try {
-            
-        } catch (error) {
-            
-        }
-    })
 });
+
+router.get('/verSusPubl/:id', async(req, res)=>{
+    try {
+        const user = req.session.user;
+        if(!user){
+            return res.redirect('/');
+        }
+     const pdUsuario = await Publicacion.findAll({where:{idUsuario:req.params.id}});
+        res.render('Usuario/publXUsuario', {pdUsuario});
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+});
+
 
 function guardarImagen(file) {
 

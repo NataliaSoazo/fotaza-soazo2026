@@ -1,0 +1,23 @@
+extends ./HomeUsuario
+
+block content
+    .row 
+        .col-2 
+        .col-4 
+            if pdUsuario && pdUsuario.length > 0          
+                  table.table.success#table.border.bg-warning
+                    thead
+                      tr
+                        th TITULO          
+                        th DESCRIPCION 
+                        th ENLACE                
+                    tbody
+                      each item in pdUsuario
+                        tr
+                          td #{item.titulo}
+                          td #{item.descripcion}
+                          td.text-center
+                            a.mx-2(href=`/vertodaPublicacion/${item.id}`)
+                                i.fa.fa-eye(title="VER TODAS LAS IMAGENES DE ESTA PLUBLICACION" style="font-size:25px; color: black;")
+            else
+                p No se encontraron publicaciones.
