@@ -12,10 +12,14 @@ html(lang="es")
     )
 
   body.bg-black
-
+    
     .container.d-flex.justify-content-center.align-items-center.vh-100
-
+      .div.text-center 
+          
       .card.shadow.p-4(style="width: 400px;")
+        if mensaje
+            .alert.alert-danger.mt-3
+              = mensaje
         if ok
           .alert.alert-success.alert-dismissible.fade.show.mt-3(role="alert")
             strong ✔ Usuario cargado correctamente

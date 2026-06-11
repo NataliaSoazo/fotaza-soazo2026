@@ -62,13 +62,24 @@ html(lang="en")
                 form(action="/meSiguen" method="GET")
                   button.btn.btn-outline-success(type="submit")
                     | Quienes me siguen
-            form.d-flex
-              input.form-control.me-2(
-                type="search"
-                placeholder="Buscar imágenes"
-                aria-label="Search"
-              )
-
-              button.btn.btn-outline-success(type="submit")
-                | Buscar
+              li.nav-item
+                form(action="/verTodo" method="GET")
+                  button.btn.btn-outline-success(type="submit")
+                    | Navegar todas las fotos
+              li.nav-item
+                form(action="/salir" method="GET")
+                  button.btn.btn-outline-success(type="submit")
+                    | Salir
+            form.d-flex.col-4(action="/buscar", method="post")
+              .input-group.mb-3
+                .input-group-prepend
+                  select.form-select(name="criterio", id="criterio")
+                    option(value="titulo") Título
+                    option(value="descripcion") Descripcion
+                input.form-control(type="text", name="valor", id="valor", placeholder="Valor a buscar", required)
+      .row
+        div#resultados.d-flex.bg-dark.p-2 
+          
+      
     block content
+    script(src="/busqueda.js")

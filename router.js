@@ -56,33 +56,22 @@ app.get('/', async (req, res) => {
     }]
     });
     const imagenes = await Imagen.findAll({
-    include:[
-        {
-            model: Publicacion,
-            where:{
-                copyright:false
-            }
-        },
-        {
-            model: Voto,
-            attributes:[]
-        }
-    ],
-    attributes:{
-        include:[
+    where: { licencia: 'Default' },
+    attributes: {
+        include: [
             [
-                Sequelize.fn('COUNT', Sequelize.col('Votos.id')),
+                Sequelize.literal(`(
+                    SELECT COUNT(*)
+                    FROM votos v
+                    WHERE v.idImagen = Imagen.id
+                )`),
                 'cantidadVotos'
             ]
         ]
     },
-    group:['Imagen.id'],
-    order:[
-        [Sequelize.literal('cantidadVotos'),'DESC']
-    ]
-});
-
-  res.render('Home/inicio',{etiquetas, imagenes});
+    order: [[Sequelize.literal('cantidadVotos'), 'DESC']]
+    });
+    res.render('Home/inicio',{etiquetas, imagenes});
 });
 
 app.get('/registro', (req, res) => {

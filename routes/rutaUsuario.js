@@ -59,14 +59,13 @@ async function encriptarClave(clave) {
 }
 
 router.post('/login', async (req, res) => {
-  const datos = {
-    mail: req.body.mail,
-    password: req.body.password
-  };
-  const usuario = await Usuario.findOne({ where: { mail: datos.mail } });
-
-  if (usuario) {
-    const validPassword = await bcrypt.compare(datos.password, usuario.password);
+  try {
+    const mensaje = req.session.mensaje;
+    const usuario = await Usuario.findOne({ where: { mail: req.body.mail,} });
+   if(!usuario){
+     return res.render('Home/ingreso', {mensaje: "Error al loguearte."});
+   }
+    const validPassword = await bcrypt.compare(req.body.password, usuario.password);
     console.log(validPassword);
     if (validPassword) {
       req.session.user = {
@@ -75,20 +74,15 @@ router.post('/login', async (req, res) => {
         usermail: usuario.mail,
         role: usuario.tipoUsuario, // Asignamos un rol
       }
-      const user = await req.session.user;
       req.session.save();
-      if (user.role == "Usuario") {
-          res.redirect('HomeUsuario');
-      } else {
-        res.render('Home/Ingreso', { user });
-      }
-    } else {
-      res.status(400).json({ error: "Password Inválido" });
-      res.render('Home/principal')
-    }
-  } else {
-    res.status(401).json({ error: "El usuario no existe" });
-    res.render('Home/ingreso');
+      
+      return res.redirect('/HomeUsuario');
+    }else{ 
+      return res.render('Home/ingreso', {mensaje: "Tu usuario o contraseña no existen."});
+    }   
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
   }
 });
 
@@ -98,33 +92,23 @@ router.get('/HomeUsuario',async(req , res)=>{
       if(!user){
         return res.redirect('/');
       }
-      const etiquetas = await Etiqueta.findAll();
+    const etiquetas = await Etiqueta.findAll();
     const imagenes = await Imagen.findAll({
-    include:[
-        {
-            model: Publicacion,
-            where:{
-                copyright:false
-            }
-        },
-        {
-            model: Voto,
-            attributes:[]
-        }
-    ],
-    attributes:{
-        include:[
+
+    attributes: {
+        include: [
             [
-                Sequelize.fn('COUNT', Sequelize.col('Votos.id')),
+                Sequelize.literal(`(
+                    SELECT COUNT(*)
+                    FROM votos v
+                    WHERE v.idImagen = Imagen.id
+                )`),
                 'cantidadVotos'
             ]
         ]
     },
-    group:['Imagen.id'],
-    order:[
-        [Sequelize.literal('cantidadVotos'),'DESC']
-    ]
-   });
+    order: [[Sequelize.literal('cantidadVotos'), 'DESC']]
+    });
     res.render('Usuario/verTodos', {user, imagenes, etiquetas})
    } catch (error) {
     console.log(error);

@@ -75,7 +75,9 @@ router.get('/verSusPubl/:id', async(req, res)=>{
     }
 });
 
-
+router.get('/verTodo', (req, res)=>{
+    res.redirect('/HomeUsuario');
+})
 function guardarImagen(file) {
 
     const newPath = `./uploads/${file.originalname}`;

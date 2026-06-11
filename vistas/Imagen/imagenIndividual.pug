@@ -32,6 +32,7 @@ block content
           a.mx-2(href=`/vertodaPublicacion/${imagen.id}`)
             i.fa.fa-arrow-right(title="VER TODAS LAS IMAGENES DE ESTA PLUBLICACION" style="font-size:25px; color: black;")
         if user!= null
+          h6 Descripción: #{imagen.Publicacion.descripcion}
           h6 Cantidad de votos: #{cantVotantes}
           h6 Estrellas: #{promedioVotos}
           h6 

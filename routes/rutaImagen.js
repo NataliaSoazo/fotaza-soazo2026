@@ -88,10 +88,9 @@ router.get('/imagen/:id', async (req, res) => {
         const usuario = await Usuario.findOne({where:{id: imagen.idUsuario}});
         const sumaDeVotos = await Voto.sum('estrellas', {where: {idImagen:id}});
         const cantVotantes = await Voto.count({where:{idImagen:id}});
-        const promedioVotos =
-          cantVotantes > 0
-        ? sumaDeVotos / cantVotantes
-        : 0;
+        let promedioVotos =0;
+          if(cantVotantes > 0)
+          promedioVotos=  (sumaDeVotos / cantVotantes).toFixed(2);
         const mensaje = req.session.mensaje;
         let verif = null
         if (user!= null){
@@ -194,7 +193,34 @@ router.get('/vertodaPublicacion/:id', async(req ,res)=>{
     }
 });
 
-
+router.get('/api/imagenes', async (req, res) => {
+  try {
+        const user = req.session.user;
+        if(!user){
+             const imagenes = await Imagen.findAll(
+        {   where:{licencia:"Default"},  
+            include:[
+            {model:Publicacion}
+            ],
+        limit:20,
+        order:[['idImagen', "DESC" ]]
+  }); 
+      res.json(imagenes); 
+        }
+      const imagenes = await Imagen.findAll(
+        {include:[
+            {model:Publicacion}
+            ],
+        limit:20,
+        order:[['idImagen', "DESC" ]]
+  }); 
+      res.json(imagenes); 
+    
+  } catch (error) {
+    console.error('Error al obtener datos imagenes:', error);
+    res.status(500).json({ error: 'Error al buscar imagenes' });
+  }
+});
 export default router;
 
 
