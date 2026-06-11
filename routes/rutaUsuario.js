@@ -165,5 +165,12 @@ router.get('/miPerfil', async(req ,res)=>{
   }
 
 });
-
+router.get('/salir', (req, res)=>{
+  try {
+    req.session.destroy();
+    res.redirect('/');
+  } catch (error) {
+    res.status(500).send('No se pudo cerrar la sesión del usuario;', error)
+  }
+});
 export default router;

@@ -9,7 +9,7 @@ fetch('/api/imagenes')
   .catch(error => {
     console.error('Error al obtener las imágenes:', error);
   });
-  console.log(imagenes)
+ // console.log(imagenes)
 
 const inputBusqueda = document.getElementById('valor');
 console.log(inputBusqueda)

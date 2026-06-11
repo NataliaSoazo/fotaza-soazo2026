@@ -3,13 +3,29 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    link(
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    )
-    link(rel="stylesheet" href="/public/css/css.css")
-    title Document
 
+    link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet")
+    link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
+    link(rel="stylesheet" href="/public/css/css.css")
+    script(src="//cdn.datatables.net/2.1.8/js/dataTables.min.js")
+    script(src="//cdn.datatables.net/2.1.8/js/dataTables.min.js")
+    script.
+      $(document).ready(function(){
+      let table = new DataTable('#tableO');
+      });
+    script.
+      $(document).ready(function() {
+      let table = $('#table').DataTable();
+      $('.dataTables_paginate').addClass('no-print'); // Paginación
+      $('.dataTables_filter').addClass('no-print')
+      })
+    script.
+      $(document).ready(function(){
+      let table = new DataTable('#d');
+      $('.dataTables_paginate').addClass('no-print'); // Paginación
+      $('.dataTables_filter').addClass('no-print')
+      });
+    title Document
   body
     .div-3
       nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
@@ -36,17 +52,17 @@ html(lang="en")
                 button.btn.btn-outline-success(type="submit")
                   | Ingresa a nuestro mundo Fotaza
 
-            form.d-flex
-              input.form-control.me-2(
-                type="search"
-                placeholder="Buscar imágenes"
-                aria-label="Search"
-              )
-              button.btn.btn-outline-success(type="submit")
-                | Buscar
+            form.d-flex.col-4(action="/buscar", method="post")
+              .input-group.mb-3
+                .input-group-prepend
+                  select.form-select(name="criterio", id="criterio")
+                    option(value="titulo") Título
+                    option(value="descripcion") Descripción
+                input.form-control(type="text", name="valor", id="valor", placeholder="Valor a buscar", required)
 
-    div
-      div
+    
+    .row
+        div#resultados.d-flex.bg-dark.p-2 
   .row.bg-success.p-2
     .col-12
       each etiqueta in etiquetas
@@ -65,4 +81,5 @@ html(lang="en")
                   alt="Imagen"
                   style="width:360px; height:500px; object-fit:cover;"
                 )
+  script(src="/busqueda.js")
   script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js")

@@ -13,8 +13,10 @@ const upload = multer({ dest: 'uploads/' });
 const router = Router();
 
 router.post('/nuevaPublicacion', upload.array('img', 10), async (req, res) => {
-
+        const operacion = await secuelizeFotaza.transaction();
+        let  guardarPorLasDudas = [];
     try {
+        
         const user = req.session.user;
 
         if(!user){
@@ -30,16 +32,17 @@ router.post('/nuevaPublicacion', upload.array('img', 10), async (req, res) => {
             idUsuario: user.id
         };
 
-        const publicacion = await Publicacion.create(nuevaPublicacion);
+        const publicacion = await Publicacion.create(nuevaPublicacion, { transaction: operacion });
         const etiquetas = req.body.etiqueta;
-        revisarEtiquetas(etiquetas, publicacion);
+         await revisarEtiquetas(etiquetas, publicacion, operacion);
 
         const imagenes = req.files;
 
         for (const file of imagenes) {
-            const rutaImagen = guardarImagen(file);
+             const rutaImagen = guardarImagen(file);
+             guardarPorLasDudas.push(rutaImagen);
             if (nuevaPublicacion.copyright) {
-                await aplicarMarcaDeAgua(rutaImagen,req.body.frase || 'FS');
+                await aplicarMarcaDeAgua(rutaImagen,req.body.frase.toUpperCase() || 'FS');
             }
             const nuevaImagen = {
                 urlImagen: rutaImagen,
@@ -48,14 +51,15 @@ router.post('/nuevaPublicacion', upload.array('img', 10), async (req, res) => {
                 idPublicacion: publicacion.id
             };
 
-         const imagen =    await Imagen.create(nuevaImagen);
+         const imagen =    await Imagen.create(nuevaImagen ,{ transaction: operacion });
          imagenesGuardadas.push(imagen);
     }
-            
+            await operacion.commit();
             res.render('Usuario/publicacionPosteada', {  publicacion, imagenesGuardadas });
 
     } catch (error) {
-
+        await operacion.rollback();
+        await eliminarImagenes(guardarPorLasDudas);
         console.log(error);
         res.status(400).send("Error");
     }
@@ -80,14 +84,14 @@ router.get('/verTodo', (req, res)=>{
 })
 function guardarImagen(file) {
 
-    const newPath = `./uploads/${file.originalname}`;
+    const newPath = `./uploads/${file.originalname + new Date()}`;
 
     fs.renameSync(file.path, newPath);
 
     return newPath;
 }
 
-async function revisarEtiquetas(tags, publ){
+async function revisarEtiquetas(tags, publ, operacion){
     const etiquetas = tags
             .split(",")
             .map(e => e.trim().toLowerCase());
@@ -98,7 +102,7 @@ async function revisarEtiquetas(tags, publ){
             let etiqueta = await Etiqueta.findOne({where: {nombre: nombreEtiqueta}});
 
             if (!etiqueta) {
-                etiqueta = await Etiqueta.create({nombre: nombreEtiqueta});
+                etiqueta = await Etiqueta.create({nombre: nombreEtiqueta}, { transaction: operacion });
             }
             await EtiquetaPublicacion.create({
                 idEtiqueta: etiqueta.id,
@@ -151,4 +155,14 @@ async function aplicarMarcaDeAgua(rutaImagen, texto) {
     fs.renameSync(rutaImagen + '.tmp', rutaImagen);
 }
 
-export default router;
+    //eliminar fotos en upload si la publicacion catchea un rollback
+  async function  eliminarImagenes(imagenesEnUpload){
+     for (const ruta of imagenesEnUpload){
+        try{
+            await fs.unlink(ruta);
+        }catch(error){
+            console.log(`La publicacion no se pudo crear, la imagen no se pudo eliminar`);
+        }
+    }
+ }
+export default routfor (ruta in )
