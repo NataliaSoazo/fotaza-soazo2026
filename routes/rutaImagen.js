@@ -8,7 +8,7 @@ import { EtiquetaPublicacion } from '../models/etiquetaPublicacion.js';
 import { Model } from 'sequelize';
 import { Publicacion } from '../models/publicacion.js';
 import { Denuncia } from '../models/denuncia.js';
-import {Sigue } from '../models/Sigue,js';
+import {Sigue } from '../models/Sigue.js';
 
 
 const router = Router();

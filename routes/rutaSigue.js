@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import {Sigue } from '../models/Sigue,js';
+import {Sigue } from '../models/Sigue.js';
 import { Model } from 'sequelize';
 import { Usuario } from '../models/usuario.js';
 
