@@ -70,7 +70,7 @@ html(lang="en")
           href=`/etiqueta/${etiqueta.id}`
         )= etiqueta.nombre
     .row.bg-dark.p-2
-      .col-2 
+      .col-1 
       .col-10 
         .d-flex.flex-wrap
           each imagen in imagenes
@@ -79,7 +79,7 @@ html(lang="en")
                 img.rounded.shadow.p-3(
                   src=`/${imagen.urlImagen}`
                   alt="Imagen"
-                  style="width:360px; height:500px; object-fit:cover;"
+                  style="width:250px; height:300px; object-fit:cover;"
                 )
   script(src="/busqueda.js")
   script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js")

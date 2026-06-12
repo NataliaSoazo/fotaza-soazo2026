@@ -2,15 +2,24 @@ extends ./HomeUsuario
 
 block content
     .row
-    br
+      .col-4
+      .col-8.p-3
+        .card.shadow.p-4(style="width: 400px;")
+            h3.text-center Publicación
+            h6 Titulo: #{publicacion.titulo.toUpperCase()}
+            ifpublicacion.descripcion!=null
+              h6 Descripción: #{publicacion.descripcion};
+            h6 Publicada por  #{usuario.nick};
+
     .row 
+        
         .col-3
-        .col-6.bg-success.p-3.rounded
+        .col-6.bg-dark.p-1.rounded
           #carouselFotos.carousel
-            .carousel-inner.p-4
+            .carousel-inner.p-1
                 each imagen, index in imagenes
                   .carousel-item(class=index === 0 ? 'active' : '')
-                    //- La imagen y los botones deben ser hermanos, no hijos de img
+                    
                     a(href=`/imagen/${imagen.id}`)
                       img.d-block.w-100(
                         src=`/${imagen.urlImagen}`

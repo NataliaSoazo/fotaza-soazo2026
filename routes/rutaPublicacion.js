@@ -7,13 +7,13 @@ import multer from 'multer';
 import fs from 'node:fs';
 import { DatabaseError, DATE } from 'sequelize';
 import sharp from 'sharp';// para crear marcas de agua
-
+import { sequelizeFotaza } from '../models/conexion.js';
 const upload = multer({ dest: 'uploads/' });
 
 const router = Router();
 
 router.post('/nuevaPublicacion', upload.array('img', 10), async (req, res) => {
-        const operacion = await secuelizeFotaza.transaction();
+        const operacion = await sequelizeFotaza.transaction();
         let  guardarPorLasDudas = [];
     try {
         
@@ -26,8 +26,8 @@ router.post('/nuevaPublicacion', upload.array('img', 10), async (req, res) => {
         //Crear publicación
         const nuevaPublicacion = {
             fecha: new Date(),
-            titulo: req.body.titulo,
-            descripcion: req.body.descripcion,
+            titulo: req.body.titulo.toLowerCase(),
+            descripcion: req.body.descripcion.toLowerCase(),
             copyright: req.body.copyright === 'on',
             idUsuario: user.id
         };
@@ -61,7 +61,7 @@ router.post('/nuevaPublicacion', upload.array('img', 10), async (req, res) => {
         await operacion.rollback();
         await eliminarImagenes(guardarPorLasDudas);
         console.log(error);
-        res.status(400).send("Error");
+        res.status(400).send("No se pudo crear tu publicación, revisa que las imagenes tengan formato .jpg o .png y que las etiquetas estén separadas por coma.");
     }
 });
 
@@ -82,9 +82,10 @@ router.get('/verSusPubl/:id', async(req, res)=>{
 router.get('/verTodo', (req, res)=>{
     res.redirect('/HomeUsuario');
 })
+
 function guardarImagen(file) {
 
-    const newPath = `./uploads/${file.originalname + new Date()}`;
+    const newPath = `./uploads/${file.originalname }`;
 
     fs.renameSync(file.path, newPath);
 
@@ -106,10 +107,7 @@ async function revisarEtiquetas(tags, publ, operacion){
             }
             await EtiquetaPublicacion.create({
                 idEtiqueta: etiqueta.id,
-                idPublicacion: publ.id
-
-            });
-
+                idPublicacion: publ.id},{transaction: operacion});
         }
 
 }
@@ -155,7 +153,7 @@ async function aplicarMarcaDeAgua(rutaImagen, texto) {
     fs.renameSync(rutaImagen + '.tmp', rutaImagen);
 }
 
-    //eliminar fotos en upload si la publicacion catchea un rollback
+  //eliminar fotos en upload si la publicacion catchea un rollback
   async function  eliminarImagenes(imagenesEnUpload){
      for (const ruta of imagenesEnUpload){
         try{
@@ -164,5 +162,5 @@ async function aplicarMarcaDeAgua(rutaImagen, texto) {
             console.log(`La publicacion no se pudo crear, la imagen no se pudo eliminar`);
         }
     }
- }
-export default routfor (ruta in )
+ }  
+export default router;

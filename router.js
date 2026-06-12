@@ -15,7 +15,7 @@ import { EtiquetaPublicacion } from './models/etiquetaPublicacion.js';
 import {Sigue} from './models/sigue.js';
 import './models/relaciones.js';
 import { Imagen } from './models/imagen.js';
-import { Sequelize } from 'sequelize';
+import { sequelizeFotaza } from './models/conexion.js';
 const app = express();
 app.set('view engine', 'pug');
 app.set('views', './vistas');
@@ -60,7 +60,7 @@ app.get('/', async (req, res) => {
     attributes: {
         include: [
             [
-                Sequelize.literal(`(
+                sequelizeFotaza.literal(`(
                     SELECT COUNT(*)
                     FROM votos v
                     WHERE v.idImagen = Imagen.id
@@ -69,7 +69,7 @@ app.get('/', async (req, res) => {
             ]
         ]
     },
-    order: [[Sequelize.literal('cantidadVotos'), 'DESC']]
+    order: [[sequelizeFotaza.literal('cantidadVotos'), 'DESC']]
     });
     res.render('Home/inicio',{etiquetas, imagenes});
 });
@@ -84,6 +84,6 @@ app.get('/ingreso', (req, res) => {
 });
 
 
-app.listen(3030, () => {
+app.listen(3000, () => {
   console.log("corriendo");
 });

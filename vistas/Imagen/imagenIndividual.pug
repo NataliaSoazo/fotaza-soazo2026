@@ -28,7 +28,7 @@ block content
       br
       h6.card-title= PUBLICACION
         h5 
-          |Título de la publicación: #{imagen.Publicacion.titulo}
+          |Título de la publicación: #{imagen.Publicacion.titulo.toUpperCase()}
           a.mx-2(href=`/vertodaPublicacion/${imagen.id}`)
             i.fa.fa-arrow-right(title="VER TODAS LAS IMAGENES DE ESTA PLUBLICACION" style="font-size:25px; color: black;")
         if user!= null

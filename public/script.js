@@ -61,7 +61,7 @@ fileInput.addEventListener('change', (e) => {
 function createImgPreview(value) {
   const imgPreview = document.createElement('img');
   imgPreview.src = value;
-  imgPreview.style.width = '300px';
+  imgPreview.style.width = '50px';
   contenedorImgs.appendChild(imgPreview);  
 }
 

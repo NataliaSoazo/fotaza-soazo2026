@@ -186,7 +186,8 @@ router.get('/vertodaPublicacion/:id', async(req ,res)=>{
     const imagen =await Imagen.findOne({where:{id: req.params.id}});
     const imagenes = await Imagen.findAll({where:{idPublicacion: imagen.idPublicacion}});
     const publicacion= await Publicacion.findByPk(imagen.idPublicacion);
-    res.render('Usuario/verPublCompleta', {imagenes, publicacion, user});
+    const usuario = await Usuario.findByPk(publicacion.idUsuario);
+    res.render('Usuario/verPublCompleta', {imagenes, publicacion, user, usuario});
     } catch (error) {
         console.log(error);
         res.status(500).send(error);

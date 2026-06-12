@@ -5,7 +5,7 @@ import {Etiqueta} from '../models/etiqueta.js';
 import { Publicacion } from '../models/publicacion.js';
 import { Voto } from '../models/voto.js';
 import bcrypt from "bcrypt";
-import { Sequelize } from 'sequelize';
+import { sequelizeFotaza } from '../models/conexion.js';
 const router = Router();
 
 router.post("/registro", async (req, res) => {
@@ -98,7 +98,7 @@ router.get('/HomeUsuario',async(req , res)=>{
     attributes: {
         include: [
             [
-                Sequelize.literal(`(
+                sequelizeFotaza.literal(`(
                     SELECT COUNT(*)
                     FROM votos v
                     WHERE v.idImagen = Imagen.id
@@ -107,7 +107,7 @@ router.get('/HomeUsuario',async(req , res)=>{
             ]
         ]
     },
-    order: [[Sequelize.literal('cantidadVotos'), 'DESC']]
+    order: [[sequelizeFotaza.literal('cantidadVotos'), 'DESC']]
     });
     res.render('Usuario/verTodos', {user, imagenes, etiquetas})
    } catch (error) {
