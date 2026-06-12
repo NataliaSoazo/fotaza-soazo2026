@@ -6,7 +6,7 @@ import { Imagen } from './imagen.js';
 import { Voto } from './voto.js';
 import { Denuncia } from './denuncia.js';
 import { Comenta } from './comenta.js';
-import { Sigue } from './sigue.js';
+import { Sigue } from './Sigue,js';
 
 Usuario.hasMany(Publicacion,{
  foreignKey:'idUsuario'
