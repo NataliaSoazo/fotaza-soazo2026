@@ -16,10 +16,10 @@ block content
           .mt-2.text-center
             if user !== null
               a.mx-2(href="#" onclick=`Comentar('${imagen.id}')`)
-                i.fa.fa-commenting(title="COMENTAR" style="font-size:25px; color: primary;")
+                i.fa.fa-commenting(title="COMENTAR" style="font-size:40px; color: primary;")
               if user.id !== imagen.idUsuario
                 a.mx-2(href="#" onclick=`Votar('${imagen.id}')`)
-                  i.fa.fa-star(title="VOTAR" style="font-size:25px; color: yellow;")  
+                  i.fa.fa-star(title="VOTAR" style="font-size:30px; color: yellow;")  
                 a.mx-2(href="#" onclick=`Denunciar('${imagen.id}')`)
                   i.fa.fa-exclamation-triangle(title="DENUNCIAR" style="font-size:25px; color: red;")
           .col-md-4
@@ -33,7 +33,7 @@ block content
             i.fa.fa-arrow-right(title="VER TODAS LAS IMAGENES DE ESTA PLUBLICACION" style="font-size:25px; color: black;")
         if user!= null
           h6 Descripción: #{imagen.Publicacion.descripcion}
-          h6 Cantidad de votos: #{cantVotantes}
+          h6 Votantes: #{cantVotantes}
           h6 Estrellas: #{promedioVotos}
           h6 
               | Publicada por : 
@@ -49,7 +49,7 @@ block content
                     a.mx-2(href=`/seguir/${usuario.id}/${imagen.id}`)
                       i.fa.fa-star(
                         title="SEGUIR"
-                        style="font-size:25px; color: black;"
+                        style="font-size:25px; color: orange;"
                       )
                 if comentarios && comentarios.length > 0
                   h4.mb-3 Comentarios
