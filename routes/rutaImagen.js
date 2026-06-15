@@ -199,14 +199,14 @@ router.get('/api/imagenes', async (req, res) => {
         const user = req.session.user;
         if(!user){
              const imagenes = await Imagen.findAll(
-        {   where:{licencia:"Default"},  
+            {   where:{licencia:"Default"},  
             include:[
             {model:Publicacion}
             ],
         limit:20,
         order:[['idImagen', "DESC" ]]
-  }); 
-      res.json(imagenes); 
+        }); 
+            return res.json(imagenes); 
         }
       const imagenes = await Imagen.findAll(
         {include:[
@@ -214,7 +214,7 @@ router.get('/api/imagenes', async (req, res) => {
             ],
         limit:20,
         order:[['idImagen', "DESC" ]]
-  }); 
+             }); 
       res.json(imagenes); 
     
   } catch (error) {
