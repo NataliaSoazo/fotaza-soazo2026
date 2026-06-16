@@ -1,4 +1,4 @@
-let imagenes; 
+let imagenes=[]; 
 
 
 fetch('/api/imagenes') 
@@ -14,6 +14,8 @@ fetch('/api/imagenes')
 const inputBusqueda = document.getElementById('valor');
 console.log(inputBusqueda)
 inputBusqueda.addEventListener('keyup', () => {
+     console.log("MIS IMAGENES:", imagenes);
+    console.log("ARRAY:", Array.isArray(imagenes));
     const valorBusqueda = inputBusqueda.value.toLowerCase();
     const criterio = document.getElementById('criterio').value; 
     console.log(valorBusqueda)

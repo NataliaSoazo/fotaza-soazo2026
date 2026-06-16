@@ -195,10 +195,10 @@ router.get('/vertodaPublicacion/:id', async(req ,res)=>{
 });
 
 router.get('/api/imagenes', async (req, res) => {
-  try {
+  try { let imagenes=[];
         const user = req.session.user;
         if(!user){
-             const imagenes = await Imagen.findAll(
+            imagenes = await Imagen.findAll(
             {   where:{licencia:"Default"},  
             include:[
             {model:Publicacion}
@@ -206,15 +206,17 @@ router.get('/api/imagenes', async (req, res) => {
         limit:20,
         order:[['idImagen', "DESC" ]]
         }); 
+            console.log(imagenes);
             return res.json(imagenes); 
         }
-      const imagenes = await Imagen.findAll(
+        imagenes = await Imagen.findAll(
         {include:[
             {model:Publicacion}
             ],
         limit:20,
         order:[['idImagen', "DESC" ]]
              }); 
+         console.log(imagenes);
       res.json(imagenes); 
     
   } catch (error) {
