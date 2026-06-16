@@ -204,7 +204,7 @@ router.get('/api/imagenes', async (req, res) => {
             {model:Publicacion}
             ],
         limit:10,
-        order:[['idImagen', "DESC" ]]
+        order:[['id', "DESC" ]]
         }); 
             
             return res.json(imagenes); 
@@ -214,7 +214,7 @@ router.get('/api/imagenes', async (req, res) => {
             {model:Publicacion}
             ],
         limit:10,
-        order:[['idImagen', "DESC" ]]
+        order:[['id', "DESC" ]]
              }); 
       res.json(imagenes); 
     
