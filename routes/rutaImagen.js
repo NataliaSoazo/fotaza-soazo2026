@@ -203,25 +203,24 @@ router.get('/api/imagenes', async (req, res) => {
             include:[
             {model:Publicacion}
             ],
-        limit:20,
+        limit:10,
         order:[['idImagen', "DESC" ]]
         }); 
-            console.log(imagenes);
+            
             return res.json(imagenes); 
         }
         imagenes = await Imagen.findAll(
         {include:[
             {model:Publicacion}
             ],
-        limit:20,
+        limit:10,
         order:[['idImagen', "DESC" ]]
              }); 
-         console.log(imagenes);
       res.json(imagenes); 
     
   } catch (error) {
-    console.error('Error al obtener datos imagenes:', error);
-    res.status(500).json({ error: 'Error al buscar imagenes' });
+    console.error(error);
+    res.status(500).json({error: error.message});
   }
 });
 export default router;
