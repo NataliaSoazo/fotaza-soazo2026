@@ -13,6 +13,7 @@ import { Etiqueta } from './models/etiqueta.js';
 import { Publicacion } from './models/publicacion.js';
 import { EtiquetaPublicacion } from './models/etiquetaPublicacion.js';
 import {Sigue} from './models/Sigue.js';
+import { Notificacion } from './models/notificacion.js';
 import './models/relaciones.js';
 import { Imagen } from './models/imagen.js';
 import { sequelizeFotaza } from './models/conexion.js';

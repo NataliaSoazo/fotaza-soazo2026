@@ -9,8 +9,11 @@ import { Model } from 'sequelize';
 import { Publicacion } from '../models/publicacion.js';
 import { Denuncia } from '../models/denuncia.js';
 import {Sigue } from '../models/Sigue.js';
-
-
+import { Intereses} from '../models/meInteresa.js';
+import { notificarVoto } from '../servicios/notificar.js';
+import { notificarComentario } from '../servicios/notificar.js';
+import { notificarInteres } from '../servicios/notificar.js';
+import { Notificacion } from '../models/notificacion.js';
 const router = Router();
 
 
@@ -32,6 +35,7 @@ router.post('/votar-imagen', async (req, res) => {
                 idUsuario: user.id,
             }
             const voto = await Voto.create(datos);
+            await notificarVoto(voto);
             req.session.mensaje = "Voto enviado!";
             res.redirect(`/imagen/${req.body.idVotada}`);
     } catch (error) {
@@ -54,6 +58,7 @@ router.post('/comentar-imagen', async (req, res) => {
                 idUsuario: user.id,
             }
             await Comenta.create(comentario);
+            await notificarComentario(comentario);
             res.redirect(`/imagen/${req.body.idComentario}`);
         } catch (error) {
            console.log(error);
@@ -64,6 +69,7 @@ router.post('/comentar-imagen', async (req, res) => {
 router.get('/imagen/:id', async (req, res) => {
     try {
         const user = req.session.user || null;
+        
         /*if(!user){
             return res.redirect('/');
         }*/
@@ -88,6 +94,9 @@ router.get('/imagen/:id', async (req, res) => {
         const usuario = await Usuario.findOne({where:{id: imagen.idUsuario}});
         const sumaDeVotos = await Voto.sum('estrellas', {where: {idImagen:id}});
         const cantVotantes = await Voto.count({where:{idImagen:id}});
+        const notif = await Notificacion.findAll({where:{idUsuarioReceptor:user.id, leido: false }});
+        const cantNotif = await Notificacion.count({where:{idUsuarioReceptor:user.id, leido: false }, order: [["createdAt", "DESC"]],
+    limit: 10});
         let promedioVotos =0;
           if(cantVotantes > 0)
           promedioVotos=  (sumaDeVotos / cantVotantes).toFixed(2);
@@ -98,7 +107,7 @@ router.get('/imagen/:id', async (req, res) => {
         console.log("VERIF =", verif);
         }
         req.session.mensaje = null;
-        res.render('Imagen/imagenIndividual', {imagen, comentarios, promedioVotos,cantVotantes, user, usuario,mensaje, verif  });
+        res.render('Imagen/imagenIndividual', {imagen, comentarios, promedioVotos,cantVotantes, user, usuario,mensaje, verif, notif, cantNotif  });
     } catch (error) {
         console.log(error);
         res.status(500).send(error);
@@ -222,6 +231,46 @@ router.get('/api/imagenes', async (req, res) => {
     console.error(error);
     res.status(500).json({error: error.message});
   }
+});
+
+router.post("/meInteresa-imagen", async(req, res)=>{
+   try {
+    const user = req.session.user;
+    if (!user){
+        return res.redirect('/');
+    }
+    const nuevoInteres = {
+                fecha: new Date(),
+                idImagen: req.body.idImagen,
+                usuarioInteresado: user.id
+            }
+             await Intereses.create(nuevoInteres); 
+             await notificarInteres(nuevoInteres);
+    res.redirect(`/imagen/${req.body.idImagen}`);
+   } catch (error) {
+    console.error(error);
+    res.status(500).json({error: error.message});
+   }
+})
+
+router.get("/notificacion/:id", async (req, res) => {
+    try {
+        const notificacion = await Notificacion.findByPk(req.params.id);
+
+        if (!notificacion) {
+            return res.redirect("/");
+        }
+
+        await notificacion.update({
+            leido: true
+        });
+
+        res.redirect(notificacion.URL);
+
+    } catch (error) {
+        console.error(error);
+        res.redirect("/");
+    }
 });
 export default router;
 

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {Sigue } from '../models/Sigue.js';
 import { Model } from 'sequelize';
 import { Usuario } from '../models/usuario.js';
+import { notificarSeguimiento } from '../servicios/notificar.js';
 
 const router = Router();
 
@@ -20,6 +21,7 @@ router.get('/seguir/:id/:idImagen', async(req, res)=>{
             fecha: new Date()
         }
     await Sigue.create(datos);
+    await notificarSeguimiento(datos)
      res.redirect(`/imagen/${req.params.idImagen}?mensaje:"Ahora sigues a este usuario`);
     }
   } catch (error) {

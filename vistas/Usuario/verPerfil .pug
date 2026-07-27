@@ -1,0 +1,20 @@
+extends ./HomeUsuario
+
+block content
+    .row.justify-content-center.mt-4
+        .col-md-5
+            .bg-white.shadow.rounded-4.p-4.border
+
+                h3.text-center.text-primary.mb-4 Mi Perfil
+
+                h5.mb-3
+                    b Usuario:
+                    span.ms-2.text-secondary #{u.nombre} #{u.apellido}
+
+                h5.mb-3
+                    b E-mail:
+                    span.ms-2.text-secondary #{u.mail}
+
+                h5.mb-0
+                    b Nick:
+                    span.ms-2.text-secondary #{u.nick}

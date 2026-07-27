@@ -6,8 +6,10 @@ html(lang="en")
 
     link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet")
     link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css")
     link(rel="stylesheet" href="/public/css/css.css")
     script(src="//cdn.datatables.net/2.1.8/js/dataTables.min.js")
+
     script(src="//cdn.datatables.net/2.1.8/js/dataTables.min.js")
     script.
       $(document).ready(function(){
@@ -31,45 +33,82 @@ html(lang="en")
       nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
         .container-fluid
           a.navbar-brand(href="#" style="color:pink;") Fotaza Fotografias
+          if user
+            button.navbar-toggler(
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            )
+              span.navbar-toggler-icon
+  
+            .collapse.navbar-collapse#navbarSupportedContent
+              ul.navbar-nav.me-auto.mb-2.mb-lg-0
+  
+                li.nav-item.me-2
+                  form(action="/miPerfil" method="GET")
+                    button.btn.btn-outline-success(type="submit")
+                      | Mi Perfil
+  
+                li.nav-item
+                  form(action="/nuevaPublicacion" method="GET")
+                    button.btn.btn-outline-success(type="submit")
+                      | Nueva publicación
+                li.nav-item
+                  form(action = '/usuariosQueSigo' method="GET")
+                    button.btn.btn-outline-success(type="submit")
+                      |  A quienes sigo
+                li.nav-item
+                  form(action="/meSiguen" method="GET")
+                    button.btn.btn-outline-success(type="submit")
+                      | Quienes me siguen
+                li.nav-item
+                  form(action="/verTodo" method="GET")
+                    button.btn.btn-outline-success(type="submit")
+                      | Navegar todas las fotos
+                  li.nav-item
+                    form(action="/modoValidador" method="GET")
+                      button.btn.btn-outline-success(type="submit")
+                        | Modo validador
+                li.nav-item
+                  form(action="/salir" method="GET")
+                    button.btn.btn-outline-success(type="submit")
+                      | Salir 
+                li.nav-item.dropdown
+                  a.nav-link.dropdown-toggle.position-relative(
+                      href="#"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                  )
+                      i.fa-solid.fa-bell.fa-lg
 
-          button.navbar-toggler(
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          )
-            span.navbar-toggler-icon
+                      if cantNotif > 0
+                          span.position-absolute.top-0.start-100.translate-middle.badge.rounded-pill.bg-danger
+                              = cantNotif
 
-          .collapse.navbar-collapse#navbarSupportedContent
-            ul.navbar-nav.me-auto.mb-2.mb-lg-0
+                  ul.dropdown-menu.dropdown-menu-end(style="width:350px; max-height:400px; overflow-y:auto;")
+                      li
+                          h6.dropdown-header Notificaciones
 
-              li.nav-item.me-2
-                form(action="/miPerfil" method="GET")
-                  button.btn.btn-outline-success(type="submit")
-                    | Mi Perfil
+                      if  notif == null
+                          li
+                              span.dropdown-item-text No tienes notificaciones
 
-              li.nav-item
-                form(action="/nuevaPublicacion" method="GET")
-                  button.btn.btn-outline-success(type="submit")
-                    | Nueva publicación
-              li.nav-item
-                form(action = '/usuariosQueSigo' method="GET")
-                  button.btn.btn-outline-success(type="submit")
-                    |  A quienes sigo
-              li.nav-item
-                form(action="/meSiguen" method="GET")
-                  button.btn.btn-outline-success(type="submit")
-                    | Quienes me siguen
-              li.nav-item
-                form(action="/verTodo" method="GET")
-                  button.btn.btn-outline-success(type="submit")
-                    | Navegar todas las fotos
-              li.nav-item
-                form(action="/salir" method="GET")
-                  button.btn.btn-outline-success(type="submit")
-                    | Salir
+                      else
+                          each notificacion in notif
+                              li
+                                a.dropdown-item(href=`/notificacion/${notificacion.id}`)
+                                    = notificacion.mensaje
+
+                      li
+                          hr.dropdown-divider
+
+                      li
+                          a.dropdown-item.text-center(href="/notificaciones")
+                              | Ver todas
+                         
             form.d-flex.col-4(action="/buscar", method="post")
               .input-group.mb-3
                 .input-group-prepend

@@ -19,7 +19,9 @@ block content
                 i.fa.fa-commenting(title="COMENTAR" style="font-size:40px; color: primary;")
               if user.id !== imagen.idUsuario
                 a.mx-2(href="#" onclick=`Votar('${imagen.id}')`)
-                  i.fa.fa-star(title="VOTAR" style="font-size:30px; color: yellow;")  
+                  i.fa.fa-star(title="VOTAR" style="font-size:30px; color: yellow;")
+                a.mx-2(href="#" onclick=`comprar('${imagen.id}')`)
+                  i.fa.fa-cart-shopping(title="ME INTERESA" style="font-size:30px; color: green;")  
                 a.mx-2(href="#" onclick=`Denunciar('${imagen.id}')`)
                   i.fa.fa-exclamation-triangle(title="DENUNCIAR" style="font-size:25px; color: red;")
           .col-md-4
@@ -123,7 +125,23 @@ block content
             .col-12  
             div.modal-footer
               button(type="submit" class="btn btn-danger") Enviar denuncia
-              button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Close                  
+              button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Close 
+              
+  div.modal.fade(tabindex="-1", id="meInteresa")
+    div.modal-dialog
+        div.modal-content
+            div.modal-header.bg-success.text-white
+                h5.modal-title Confirmar interés
+                button.btn-close(type="button" data-bs-dismiss="modal")
+
+            div.modal-body
+                p ¿Deseas comprar esta imagen?
+
+            div.modal-footer
+                form(action="/meInteresa-imagen", method="post")
+                    input(type="hidden", id="idDeInteres", name="idImagen")
+                    button.btn.btn-success(type="submit") Sí, me interesa
+                button.btn.btn-secondary(type="button", data-bs-dismiss="modal") Cancelar               
   script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js")
   script.
        function Votar(idVotada) {
@@ -141,5 +159,11 @@ block content
      function Denunciar(idDenunciada) {
       document.querySelector("#idDenunciada").value = idDenunciada;
       var myModal = new bootstrap.Modal(document.getElementById('denunciar'));
+      myModal.show();
+     }   
+  script.
+     function comprar(idDeInteres) {
+      document.querySelector("#idDeInteres").value = idDeInteres;
+      var myModal = new bootstrap.Modal(document.getElementById('meInteresa'));
       myModal.show();
      }   

@@ -15,12 +15,16 @@ html(lang="es")
       .container.p-5.col-4
         .card.shadow.p-4(style="width: 400px;") 
             h3.text-center.mb-4 Crea tu cuenta en nuestra comunidad
+            if mensaje
+              .alert.alert-danger.mt-3
+                = mensaje
             form(action="/registro" method="POST")
               .mb-3
                 label.form-label Nombre
                 input.form-control(
                   type="text"
                   name="nombre"
+                  value= datos ? datos.nombre : ""
                   required
                 )
               .mb-3
@@ -28,6 +32,7 @@ html(lang="es")
                 input.form-control(
                   type="text"
                   name="apellido"
+                  value= datos ? datos.apellido : ""
                   required
                 )
               // Email
@@ -36,22 +41,17 @@ html(lang="es")
                 input.form-control(
                   type="text"
                   name="nick"
+                  value= datos ? datos.nick : ""
                   required
                 )
 
-              // Contraseña
-              .mb-3
-                label.form-label Contraseña
-                input.form-control(
-                  type="password"
-                  name="password"
-                  required
-                )
+              
               .mb-3
                 label.form-label Teléfono
                 input.form-control(
                   type="text"
                   name="telefono"
+                  value= datos ? datos.telefono : ""
                   required
                 )
               // Email
@@ -60,6 +60,15 @@ html(lang="es")
                 input.form-control(
                   type="email"
                   name="mail"
+                  value= datos ? datos.mail : ""
+                  required
+                )
+              // Contraseña
+              .mb-3
+                label.form-label Contraseña
+                input.form-control(
+                  type="password"
+                  name="password"
                   required
                 )
               // Términos
