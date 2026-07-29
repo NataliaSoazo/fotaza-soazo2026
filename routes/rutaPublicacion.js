@@ -8,6 +8,7 @@ import fs from 'node:fs';
 import { DatabaseError, DATE } from 'sequelize';
 import sharp from 'sharp';// para crear marcas de agua
 import { sequelizeFotaza } from '../models/conexion.js';
+import {Usuario} from'../models/usuario.js';
 const upload = multer({ dest: 'uploads/' });
 
 const router = Router();
@@ -71,8 +72,9 @@ router.get('/verSusPubl/:id', async(req, res)=>{
         if(!user){
             return res.redirect('/');
         }
-     const pdUsuario = await Publicacion.findAll({where:{idUsuario:req.params.id}});
-        res.render('Usuario/publXUsuario', {pdUsuario});
+        const usuario = await  Usuario.findByPk(req.params.id);
+        const pdUsuario = await Publicacion.findAll({where:{idUsuario:req.params.id}});
+        res.render('Usuario/publXUsuario', {pdUsuario, usuario});
     } catch (error) {
         console.log(error);
         res.status(500).send(error);

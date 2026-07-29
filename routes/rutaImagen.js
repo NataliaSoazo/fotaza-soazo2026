@@ -207,6 +207,18 @@ router.get('/vertodaPublicacion/:id', async(req ,res)=>{
         res.status(500).send(error);
     }
 });
+/*Aqui tengo que buscar una imagen que corresponda 
+a la publicacion para que 
+verTodaPublicacion Pueda ser referida desde verSusPubl*/
+router.get('/vertodaPublicacion2/:id', async(req ,res)=>{
+    try {
+    const unaImagenDeLaPublicacion = await Imagen.findOne({where:{idPublicacion:req.params.id}})
+    res.redirect(`/vertodaPublicacion/${unaImagenDeLaPublicacion.id}`)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+});
 
 router.get('/api/imagenes', async (req, res) => {
   try { let imagenes=[];

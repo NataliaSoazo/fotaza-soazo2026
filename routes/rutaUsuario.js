@@ -5,6 +5,7 @@ import {Etiqueta} from '../models/etiqueta.js';
 import { Publicacion } from '../models/publicacion.js';
 import { Voto } from '../models/voto.js';
 import { Notificacion } from '../models/notificacion.js';
+import {Sigue } from '../models/Sigue.js';
 import bcrypt from "bcrypt";
 import { sequelizeFotaza } from '../models/conexion.js';
 import { and } from 'sequelize';
@@ -185,8 +186,10 @@ router.get('/miPerfil', async(req ,res)=>{
       if (!user){
     return res.redirect('/');
       }
-    const u = await  Usuario.findByPk(user.id);
-    res.render('Usuario/miperfil', {u});
+    const sigo = await Sigue.count({where:{idSeguidor: user.id}});
+    const meSiguen = await Sigue.count({where: {idSeguido: user.id}});
+    const u = await  Usuario.count(user.id);
+    res.render('Usuario/miperfil', {u, sigo,meSiguen});
   } catch (error) {
     console.log(error)
     res.status(500).send(error);
@@ -219,6 +222,7 @@ router.get('/verPerfil/:id', async(req ,res)=>{
     return res.redirect('/');
       }
     const u = await  Usuario.findByPk(req.params.id);
+    
     res.render('Usuario/verPerfil', {u});
   } catch (error) {
     console.log(error)
