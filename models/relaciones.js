@@ -7,6 +7,7 @@ import { Voto } from './voto.js';
 import { Denuncia } from './denuncia.js';
 import { Comenta } from './comenta.js';
 import { Sigue } from './Sigue.js';
+import { Notificacion } from './notificacion.js';
 
 Usuario.hasMany(Publicacion,{
  foreignKey:'idUsuario'
@@ -99,3 +100,13 @@ Sigue.belongsTo(Usuario, { foreignKey: 'idSeguido', as:'Seguido' });
 
 Usuario.hasMany(Sigue, {foreignKey:'idSeguidor', as:'Siguiendo' });
 Usuario.hasMany(Sigue, {foreignKey: 'idSeguido', as:'Seguidores' });
+
+//LO MISMO HA DE PASAR CON nOTIFICACIONES
+//una notificación tiene un solo emisor.
+Notificacion.belongsTo(Usuario, {foreignKey: 'idUsuarioEmisor', as: 'emisor'});
+//una notificación tiene un solo receptor.
+Notificacion.belongsTo(Usuario,{foreignKey:'idUsuarioReceptor', as:'receptor' });
+//un usuario puede emitir muchas notificaciones.
+Usuario.hasMany(Notificacion, {foreignKey: 'idUsuarioEmisor', as:'notificante'});
+//un usuario puede recibir muchas notificaciones.
+Usuario.hasMany(Notificacion,{foreignKey: 'idUsuarioReceptor', as: 'notificado' });

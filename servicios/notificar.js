@@ -1,6 +1,6 @@
 import {Notificacion} from '../models/notificacion.js';
 import {Imagen} from '../models/imagen.js';
-
+import { Usuario } from '../models/usuario.js';
 export async function  notificarVoto(voto){
     try {
         /* fecha: new Date(),
@@ -8,13 +8,14 @@ export async function  notificarVoto(voto){
     estrellas: req.body.voto,
     idUsuario: user.id,*/
     //Buscando el receptor
+    const votante = await Usuario.findByPk(voto.idUsuario);
    const imagen = await Imagen.findByPk(voto.idImagen, {attributes:
     ['idUsuario']});
     const datos = {
         fecha: voto.fecha,
         idUsuarioReceptor: imagen.idUsuario,
         tipo: 'Voto',
-        mensaje: 'Haz recibido una nueva valoración',
+        mensaje: votante.nick + ' Ha valorado tu imagen',
         leido: false,
         URL: `/imagen/${voto.idImagen}`,
         idUsuarioEmisor: voto.idUsuario
@@ -38,11 +39,12 @@ export async function notificarComentario(comentario){
     idUsuario: user.id,*/
     const imagen = await Imagen.findByPk(comentario.idImagen, {attributes:
     ['idUsuario']});
+     const comentarista = await Usuario.findByPk(comentario.idUsuario);
     const datos = {
         fecha: comentario.fecha,
         idUsuarioReceptor: imagen.idUsuario,
         tipo: 'Comentario',
-        mensaje: 'Haz recibido un nuevo comentario',
+        mensaje: comentarista.nick +' ha comentado tu imagen',
         leido: false,
         URL: `/imagen/${comentario.idImagen}`,
         idUsuarioEmisor: comentario.idUsuario
@@ -61,11 +63,12 @@ export async function notificarSeguimiento(d){
             /* idSeguidor: user.id,
             idSeguido: idSeguir,
             fecha: new Date()*/
+        const usuarioSeguidor = await Usuario.findByPk(d.idSeguidor);
         const datos = {
         fecha: d.fecha,
         idUsuarioReceptor: d.idSeguido,
         tipo: 'Seguimiento',
-        mensaje:  ' Ha comenzado a seguirte ',
+        mensaje:  usuarioSeguidor.nick + ' Ha comenzado a seguirte ',
         leido: false,
         URL:`/verPerfil${d.idSeguidor}`,
         idUsuarioEmisor: d.idSeguidor
@@ -74,8 +77,7 @@ export async function notificarSeguimiento(d){
     } catch (error) {
         console.log(error);
         throw new Error("No pudimos notificar tu acción");
-        
-        
+            
     }
 }
 export async function notificarInteres(nuevoInteres){
@@ -87,11 +89,13 @@ export async function notificarInteres(nuevoInteres){
     try {
         const imagen = await Imagen.findByPk(nuevoInteres.idImagen, {attributes:
         ['idUsuario']});
+        const usuarioInteresado = await Usuario.findByPk(nuevoInteres.usuarioInteresado);
+        
         const datos = {
         fecha: nuevoInteres.fecha,
         idUsuarioReceptor: imagen.idUsuario,
         tipo: 'Me Interesa',
-        mensaje:  'Hay un nuevo interesado por adquirir tu imagen ',
+        mensaje:  usuarioInteresado.nick +' desea adquirir tu imagen ',
         leido: false,
         URL: `/imagen/${nuevoInteres.idImagen}`,
         idUsuarioEmisor: nuevoInteres.usuarioInteresado
@@ -100,7 +104,5 @@ export async function notificarInteres(nuevoInteres){
     } catch (error) {
         console.log(error);
         throw new Error("No pudimos notificar tu acción");
-        
     }
-
 }

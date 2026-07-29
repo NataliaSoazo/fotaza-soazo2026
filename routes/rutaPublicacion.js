@@ -163,4 +163,23 @@ async function aplicarMarcaDeAgua(rutaImagen, texto) {
         }
     }
  }  
+
+ router.post('/editarPublicacion', async (req, res)=>{
+    try {
+        const user = req.session.user;
+    if(!user){
+        return('/');
+    }
+    const datos ={
+        titulo: req.body.t,
+        descripcion: req.body.d
+    }
+     await Publicacion.update(datos, {where:{id:req.body.idP}});
+    res.redirect(`/vertodaPublicacion/${req.body.idP}`);
+    } catch (error) {
+        console.log(error);
+         res.status(500).json({error: error.message});
+    }
+
+ })
 export default router;

@@ -58,6 +58,7 @@ router.post('/comentar-imagen', async (req, res) => {
                 idUsuario: user.id,
             }
             await Comenta.create(comentario);
+            req.session.mensaje = "Comentario posteado";
             await notificarComentario(comentario);
             res.redirect(`/imagen/${req.body.idComentario}`);
         } catch (error) {
@@ -94,9 +95,13 @@ router.get('/imagen/:id', async (req, res) => {
         const usuario = await Usuario.findOne({where:{id: imagen.idUsuario}});
         const sumaDeVotos = await Voto.sum('estrellas', {where: {idImagen:id}});
         const cantVotantes = await Voto.count({where:{idImagen:id}});
-        const notif = await Notificacion.findAll({where:{idUsuarioReceptor:user.id, leido: false }});
-        const cantNotif = await Notificacion.count({where:{idUsuarioReceptor:user.id, leido: false }, order: [["createdAt", "DESC"]],
-    limit: 10});
+        let notif = [];
+        let cantNotif = 0;
+        if(user){
+             notif = await Notificacion.findAll({where:{idUsuarioReceptor:user.id, leido: false }});
+             cantNotif = await Notificacion.count({where:{idUsuarioReceptor:user.id, leido: false }, order: [["createdAt", "DESC"]],
+            limit: 10});
+        }
         let promedioVotos =0;
           if(cantVotantes > 0)
           promedioVotos=  (sumaDeVotos / cantVotantes).toFixed(2);
@@ -239,6 +244,11 @@ router.post("/meInteresa-imagen", async(req, res)=>{
     if (!user){
         return res.redirect('/');
     }
+    const interesPrevio = await Intereses.findOne({where: {idImagen: req.body.idImagen, usuarioInteresado:user.id}})
+            if (interesPrevio){
+               req.session.mensaje = "Ya notificaste tu interés previamente";
+                return res.redirect(`/imagen/${req.body.idImagen}`);
+            }
     const nuevoInteres = {
                 fecha: new Date(),
                 idImagen: req.body.idImagen,
@@ -246,7 +256,8 @@ router.post("/meInteresa-imagen", async(req, res)=>{
             }
              await Intereses.create(nuevoInteres); 
              await notificarInteres(nuevoInteres);
-    res.redirect(`/imagen/${req.body.idImagen}`);
+             req.session.mensaje = "Hemos notificado correctamente tu interés";
+            res.redirect(`/imagen/${req.body.idImagen}`);
    } catch (error) {
     console.error(error);
     res.status(500).json({error: error.message});
@@ -269,8 +280,39 @@ router.get("/notificacion/:id", async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        res.redirect("/");
+        res.status(500).json({error: error.message});
     }
+});
+
+router.get('/notificaciones',async  (req , res)=>{
+      try {
+        const user = req.session.user;
+        if(!user){
+            res.redirect('/');
+        }
+         const noLeidas = await  Notificacion.findAll({where:{idUsuarioReceptor: user.id, leido:false},
+        include:[
+            {
+                model: Usuario,
+                as: 'emisor'
+            }
+        ],
+        limit:10,
+        order:[['fecha', "DESC" ]]
+                });
+        const leidas = await  Notificacion.findAll({where:{idUsuarioReceptor: user.id, leido:true},
+        include:[
+            {
+                model: Usuario,
+                as: 'emisor'
+            }
+        ],
+        limit:10,
+        order:[['fecha', "DESC" ]]        });
+         res.render('Notificacion/listaNotificaciones', {leidas, noLeidas});
+      } catch (error) {
+        res.status(500).json({error: error.message});
+      }
 });
 export default router;
 

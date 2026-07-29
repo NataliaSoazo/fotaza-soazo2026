@@ -219,7 +219,7 @@ router.get('/verPerfil/:id', async(req ,res)=>{
     return res.redirect('/');
       }
     const u = await  Usuario.findByPk(req.params.id);
-    res.render('Usuario/verperfil', {u});
+    res.render('Usuario/verPerfil', {u});
   } catch (error) {
     console.log(error)
     res.status(500).send(error);

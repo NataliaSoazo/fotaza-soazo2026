@@ -1,0 +1,58 @@
+extends ../Usuario/HomeUsuario
+block content
+  .row 
+    .col-2
+    .col-4
+      h4.text-center.p-5 NOTIFICACIONES NO VISTAS
+      if noLeidas && noLeidas.length > 0
+              table.table.success#table.border.bg-success
+                thead
+                  tr
+                    th FECHA 
+                    th USUARIO
+                    th TIPO          
+                    th.text-center ACCIONES                 
+                tbody
+                  each item in noLeidas
+                    tr
+                      td #{item.fecha}
+                      td #{item.emisor.nick}
+                      td #{item.tipo}
+                      td.text-center
+                        if noLeidas.tipo !== "Seguimiento"
+                          a(href=`/notificacion/${item.id}`)
+                            i.fa.fa-eye(title="VER NOIFICACION" style="font-size:25px; color: black;")
+                          a(href=`/verPerfil/${item.emisor.id}`)
+                            i.fa.fa-user(title="VER NOIFICACION" style="font-size:25px; color: black;")
+                        else 
+                          a(href=`/verPerfil/${item.emisor.id}`)
+                            i.fa.fa-user(title="VER NOIFICACION" style="font-size:25px; color: black;")
+      else
+          p No se encontraron notificaciones no leidas.
+    .col-4
+      h4.text-center.p-5 NOTIFICACIONES VISTAS
+      if leidas && leidas.length > 0
+              table.table.success#table.border.bg-warning
+                thead
+                  tr
+                    th FECHA 
+                    th USUARIO
+                    th TIPO          
+                    th.text-center ACCIONES                 
+                tbody
+                  each item in leidas
+                    tr
+                      td #{item.fecha}
+                      td #{item.emisor.nick}
+                      td #{item.tipo}
+                      td.text-center
+                        if leidas.tipo !== "Seguimiento"
+                          a(href=`/notificacion/${item.id}`)
+                            i.fa.fa-eye(title="VER NOIFICACION" style="font-size:25px; color: black;")
+                          a(href=`/verPerfil/${item.emisor.id}`)
+                            i.fa.fa-user(title="VER NOIFICACION" style="font-size:25px; color: black;")
+                        else 
+                            a(href=`/verPerfil/${item.emisor.id}`)
+                              i.fa.fa-user(title="VER NOIFICACION" style="font-size:25px; color: black;")
+      else
+          p No se encontraron notificaciones leidas.
