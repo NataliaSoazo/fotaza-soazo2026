@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
+const sequelizeFotaza = new Sequelize(process.env.DATABASE_URL, {
   dialect: 'mysql',
   pool: {
     max: 5,

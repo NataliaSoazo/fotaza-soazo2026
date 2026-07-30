@@ -13,7 +13,7 @@ block content
               tr
                 th.text-center ID IMAGEN
                 th.text-center CANTIDAD DE DENUNCIAS
-                th.text-center IDS DE LOS DENUNCIANTES
+                th.text-center MOTIVOS
                 th.text-center ENLACE
             tbody
               each imagen in imagenesDenunciadas
@@ -22,7 +22,7 @@ block content
                   td.text-center= imagen.Denuncia.length
                   td.text-center
                     each denuncia in imagen.Denuncia
-                      span.me-2 #{denuncia.idUsuario}, 
+                        h6 #{denuncia.motivo}
                   td.text-center
                     a(href=`/vertodaPublicacion2/${imagen.id}`)
                       i.fa.fa-eye(
@@ -32,6 +32,11 @@ block content
                       i.fa.fa-trash.p-2(
                         title="ELIMINAR IMAGEN"
                         style="font-size:25px; color:red;")
+                    a(href=`/darDeBaja/${imagen.idPublicacion}`)
+                      i.fa-solid.fa-arrow-down(
+                          title="Ver más"
+                          style="font-size:25px; color:red;"
+                      )
 
         else
           p.text-center No se encontraron imágenes con mas de 3 denuncias.

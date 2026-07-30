@@ -53,6 +53,10 @@ html(lang="en")
                       | Mi Perfil
   
                 li.nav-item
+                  form(action="/HomeUsuario" method="GET")
+                    button.btn.btn-outline-success(type="submit")
+                      | Home
+                li.nav-item
                   form(action="/nuevaPublicacion" method="GET")
                     button.btn.btn-outline-success(type="submit")
                       | Nueva publicación

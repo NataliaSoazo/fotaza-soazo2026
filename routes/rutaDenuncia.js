@@ -81,4 +81,26 @@ router.get('/publicacionesBajadas', async (req, res) => {
         res.status(500).send(error);
     }
 });
+router.get('/darDeBaja/:id', async (req, res) => {
+    try {
+        const user = req.session.id;
+        const usuario = await Usuario.findByPk(user.id);
+        const publicacion = await Publicacion.findByPk(req.params.id);
+        if (usuario.tipoUsuario == 'Validador') {
+            await Publicacion.update({ bajada: true }, { where: { id: req.params.id } });
+            const cantidadBajadasDelUsuario = await Publicacion.count({ where: { idUsuario: publicacion.idUsuario, bajada: true } });
+            if(cantidadBajadasDelUsuario > 2){
+                await Usuario.update({anulado:true}, {where:{ id: publicacion.idUsuario}});
+            }
+            req.session.mensaje= "La publicacion han sido dados de baja";
+            res.redirect("back");
+        }
+        req.session.mensaje= "No tienes permisos para dar de baja";
+        res.redirect("back");
+           
+    } catch (error) {
+             console.log(error);
+            res.status(500).send(error);
+    }
+})
 export default router;
