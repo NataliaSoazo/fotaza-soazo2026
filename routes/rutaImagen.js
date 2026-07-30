@@ -166,6 +166,11 @@ router.post('/denunciar-imagen', async (req, res) => {
         if(!user){
             return res.redirect('/');
         }
+        const yaLaHubo = await Denuncia.findOne({where:{idImagen:req.body.idDenunciada, idUsuario:user.id}});
+        if (yaLaHubo){
+               req.session.mensaje = "Ya denunciaste esta imagen";
+                return res.redirect(`/imagen/${req.body.idDenunciada}`);
+            }
         const denuncia ={
             fecha: new Date(),
             idImagen : req.body.idDenunciada,
@@ -173,17 +178,8 @@ router.post('/denunciar-imagen', async (req, res) => {
             descripcion: req.body.d,
             idUsuario: user.id
         }
-        Denuncia.create(denuncia);
+        await Denuncia.create(denuncia);
         const imagen = await Imagen.findOne({where:{id:req.body.idDenunciada}});
-
-        await Publicacion.update({ denunciada: true },{where: {id: imagen.idPublicacion}});
-
-        const cantidadDenunciadas = await Publicacion.count({where: 
-            {idUsuario: imagen.idUsuario,denunciada: true}});
-
-            if (cantidadDenunciadas >= 3) {
-        await Usuario.update({ anulado: true },{ where: {id:imagen.idUsuario} });
-            }
         req.session.mensaje = 'Su denuncia fue registrada correctamente';
         res.redirect(`/imagen/${req.body.idDenunciada}?mensaje:"Su denuncia fué enviada correctamente`);
         

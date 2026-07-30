@@ -9,13 +9,14 @@ import {Sigue } from '../models/Sigue.js';
 import bcrypt from "bcrypt";
 import { sequelizeFotaza } from '../models/conexion.js';
 import { and } from 'sequelize';
+import { Coleccion } from '../models/coleccion.js';
 const router = Router();
 
 router.post("/registro", async (req, res) => {
     let message;
     let datos = req.body;
   try {
-    
+    const t = await sequelizeFotaza.transaction();
     console.log(req.body);
     const password = req.body.password;
     const  nick = req.body.nick;
@@ -34,12 +35,21 @@ router.post("/registro", async (req, res) => {
       mail: req.body.mail,
       urlAvatar: "nadaporAhora",
       anulado:false,
+      
     };
 
-    console.log("Este es el nuevo usuario:", nuevoUsuario);
-    await Usuario.create(nuevoUsuario);
+    console.log("Este es el nuevo usuario:", nuevoUsuario,{transaction:t});
+
+    await Coleccion.create({
+        nombre:"Favoritos",
+        idUsuario:usuario.id
+    },{transaction:t});
+
+    await t.commit();
     res.redirect('/ingreso?ok=1');
   } catch (error) {
+
+    await t.rollback();
     console.error( error);
     return res.render('Home/registro', {mensaje: error.message, datos});
   }
@@ -149,13 +159,13 @@ router.get('/nuevaPublicacion', async (req, res) => {
     try {
 
         const  user =req.session.user;
-
+        const usuario = Usuario.findByPk(user.id);
         // validar sesión
         if (!user) {
             return res.redirect('/');
         }
 
-        res.render('Usuario/nuevaPublicacion', { user });
+        res.render('Usuario/nuevaPublicacion', { user , usuario});
 
     } catch (error) {
 
@@ -204,30 +214,52 @@ router.get('/salir', (req, res)=>{
     res.status(500).send('No se pudo cerrar la sesión del usuario;', error)
   }
 });
-router.get('/modoValidador', (req,res)=>{
-   try {
-    const user = req.session.user;
-   if(user.role='Validador'){
-    res.render('Usuario/modoValidador');
-   }
-   } catch (error) {
-    res.status(500).send('Erro solicitud no encontrada', error)
-   }
-})
+router.get('/modoValidador', async (req, res) => {
+    try {
+        const user = req.session.user;
+        if (!user) {
+            return res.redirect('/');
+        }
+        const usuario = await Usuario.findByPk(user.id);
+        if (usuario.tipoUsuario === 'Validador') {
+            return res.render('Usuario/modoValidador');
+        }
+       return res.status(403).send('No tiene permisos para acceder a este espacio.');
 
-router.get('/verPerfil/:id', async(req ,res)=>{
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send('Error interno del servidor.');
+    }
+});
+
+router.get('/verPerfil/:id', async (req, res) => {
+
   try {
     const user = req.session.user;
-      if (!user){
-    return res.redirect('/');
-      }
-    const u = await  Usuario.findByPk(req.params.id);
-    
-    res.render('Usuario/verPerfil', {u});
+    if (!user) {
+      return res.redirect('/');
+    }
+
+    const usuarioValidado = await Usuario.findByPk(user.id);
+    const u = await Usuario.findByPk(req.params.id);
+    const publicacionesBajadas = await Publicacion.count({ where: { bajada: true, idUsuario: req.params.id } });
+    res.render('Usuario/verPerfil', { u, publicacionesBajadas, usuarioValidado });
   } catch (error) {
     console.log(error)
     res.status(500).send(error);
   }
 
 });
+router.get('/retornarAModoComun', (req , res)=>{
+   try {
+    const user = req.session.user;
+    if(!user){
+      res.redirect('/');
+    }
+    res.redirect('/HomeUsuario');
+   } catch (error) {
+     console.log(error)
+    res.status(500).send(error);
+   }
+  })
 export default router;

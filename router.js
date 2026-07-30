@@ -2,6 +2,8 @@ import rutaUsuario from './routes/rutaUsuario.js';
 import rutaPublicacion from './routes/rutaPublicacion.js';
 import rutaImagen from './routes/rutaImagen.js';
 import rutaSigue from './routes/rutaSigue.js';
+import rutaDenuncia from './routes/rutaDenuncia.js';
+import rutaFavorito from "./routes/rutaFavorito.js";
 import express from 'express';
 import session from 'express-session';
 import path from 'path';
@@ -40,6 +42,8 @@ app.use(rutaUsuario);
 app.use(rutaPublicacion);
 app.use(rutaImagen);
 app.use(rutaSigue);
+app.use(rutaDenuncia);
+app.use(rutaFavorito);
 app.use('/uploads', express.static('uploads'));
 // Vistas
 app.get('/', async (req, res) => {

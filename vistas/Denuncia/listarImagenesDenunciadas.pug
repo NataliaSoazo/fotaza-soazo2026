@@ -1,0 +1,43 @@
+extends ../Usuario/modoValidador
+
+block content
+  .row
+    .col-2
+    .col-8
+      .card.shadow.p-4
+        h5.text-center.mb-3 IMÁGENES DENUNCIADAS
+
+        if imagenesDenunciadas && imagenesDenunciadas.length > 0
+          table.table.table-warning#table
+            thead
+              tr
+                th.text-center ID IMAGEN
+                th.text-center CANTIDAD DE DENUNCIAS
+                th.text-center IDS DE LOS DENUNCIANTES
+                th.text-center ENLACE
+            tbody
+              each imagen in imagenesDenunciadas
+                tr
+                  td.text-center= imagen.id
+                  td.text-center= imagen.Denuncia.length
+                  td.text-center
+                    each denuncia in imagen.Denuncia
+                      span.me-2 #{denuncia.idUsuario}, 
+                  td.text-center
+                    a(href=`/vertodaPublicacion2/${imagen.id}`)
+                      i.fa.fa-eye(
+                        title="VER TODAS LAS IMÁGENES DE ESTA PUBLICACIÓN"
+                        style="font-size:25px; color:black;")
+                    a(href=`/vertodaPublicacion2/${imagen.id}`)
+                      i.fa.fa-trash.p-2(
+                        title="ELIMINAR IMAGEN"
+                        style="font-size:25px; color:red;")
+
+        else
+          p.text-center No se encontraron imágenes con mas de 3 denuncias.
+        
+  .row.justify-content-center.mt-4
+    .col-md-5.text-center
+      a.btn.btn-outline-primary(href="javascript:history.back()")
+        i.fa.fa-arrow-left.me-2
+        | Volver

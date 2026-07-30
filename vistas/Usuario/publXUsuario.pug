@@ -1,26 +1,31 @@
 extends ./HomeUsuario
 
 block content
-    .row 
-        .col-2 
-        .col-6 
-          .card.shadow.p-4.text-center(style="width: 400px;")
-            h5.m-3 Publicacipnes del Usuario: #{usuario.nick.toUpperCase()}
-          .div.p-3
-            if pdUsuario && pdUsuario.length > 0          
-                table.table.success#table.border.bg-warning.p-3
-                  thead
+  .row 
+      .col-2 
+      .col-6 
+        .card.shadow.p-4.text-center(style="width: 400px;")
+          h5.m-3 Publicacipnes del Usuario: #{usuario.nick.toUpperCase()}
+        .div.p-3
+          if pdUsuario && pdUsuario.length > 0          
+              table.table.success#table.border.bg-warning.p-3
+                thead
+                  tr
+                    th TITULO          
+                    th DESCRIPCION 
+                    th ENLACE                
+                tbody
+                  each item in pdUsuario
                     tr
-                      th TITULO          
-                      th DESCRIPCION 
-                      th ENLACE                
-                  tbody
-                    each item in pdUsuario
-                      tr
-                        td #{item.titulo}
-                        td #{item.descripcion}
-                        td.text-center
-                          a.mx-2(href=`/vertodaPublicacion2/${item.id}`)
-                              i.fa.fa-eye(title="VER TODAS LAS IMAGENES DE ESTA PLUBLICACION" style="font-size:25px; color: black;")
-            else
-              p No se encontraron publicaciones.
+                      td #{item.titulo}
+                      td #{item.descripcion}
+                      td.text-center
+                        a.mx-2(href=`/vertodaPublicacion2/${item.id}`)
+                            i.fa.fa-eye(title="VER TODAS LAS IMAGENES DE ESTA PLUBLICACION" style="font-size:25px; color: black;")
+          else
+            p No se encontraron publicaciones.
+  .row.justify-content-center.mt-4
+    .col-md-5.text-center
+      a.btn.btn-outline-primary(href="javascript:history.back()")
+        i.fa.fa-arrow-left.me-2
+        | Volver

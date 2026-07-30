@@ -56,7 +56,7 @@ router.post('/nuevaPublicacion', upload.array('img', 10), async (req, res) => {
          imagenesGuardadas.push(imagen);
     }
             await operacion.commit();
-            res.render('Usuario/publicacionPosteada', {  publicacion, imagenesGuardadas });
+            res.render('Usuario/publicacionPosteada', {  publicacion, imagenesGuardadas, user });
 
     } catch (error) {
         await operacion.rollback();

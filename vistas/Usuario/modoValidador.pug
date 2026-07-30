@@ -51,9 +51,17 @@ html(lang="en")
                     | Imagenes denunciadas
 
               li.nav-item
-                form(action="/usuariosDenunciados" method="GET")
+                form(action="/imagenesDenunciadasMasDe3" method="GET")
                   button.btn.btn-outline-danger(type="submit")
-                    | Usuarios denunciados
+                    | Con más de 3 denuncias
+              li.nav-item
+                form(action="/publicacionesBajadas" method="GET")
+                  button.btn.btn-outline-danger(type="submit")
+                    | publicaciones Bajadas 
+              li.nav-item
+                form(action="/usuariosDesactivados" method="GET")
+                  button.btn.btn-outline-danger(type="submit")
+                    | Usuarios desactivados
               li.nav-item
                 form(action="/retornarAModoComun" method="GET")
                   button.btn.btn-outline-danger(type="submit")

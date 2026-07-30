@@ -1,20 +1,40 @@
 extends ./HomeUsuario
 
 block content
-    .row.justify-content-center.mt-4
-        .col-md-5
-            .bg-white.shadow.rounded-4.p-4.border
+  .row.justify-content-center.mt-4
+    .col-md-6.col-lg-5
+      .card.shadow.border-0.rounded-4
+        .card-body.p-4
 
-                h3.text-center.text-primary.mb-4 Perfil del usuario
+          h3.text-center.text-primary.mb-4 Perfil del usuario
+          hr
 
-                h5.mb-3
-                    b Usuario:
-                    span.ms-2.text-secondary #{u.nombre} #{u.apellido}
+          .mb-3
+            strong Usuario:
+            span.ms-2.text-secondary #{u.nombre} #{u.apellido}
 
-                h5.mb-3
-                    b E-mail:
-                    span.ms-2.text-secondary #{u.mail}
+          .mb-3
+            strong E-mail:
+            span.ms-2.text-secondary #{u.mail}
 
-                h5.mb-0
-                    b Nick:
-                    span.ms-2.text-secondary #{u.nick}
+          .mb-3
+            strong Nick:
+            span.ms-2.text-secondary #{u.nick}
+
+          if usuarioValidado.tipoUsuario == 'Validador'
+            .mb-3
+              strong Dado de baja ? :
+              span.ms-2.text-secondary 
+              if u.anulado== true
+                span.ms-2.text-secondary  SI
+              else 
+                span.ms-2.text-secondary  NO
+            .mb-3
+              strong Publicaciones dadas de baja:
+              span.ms-2.text-secondary #{publicacionesBajadas}
+
+  .row.justify-content-center.mt-4
+    .col-md-5.text-center
+      a.btn.btn-outline-primary(href="javascript:history.back()")
+        i.fa.fa-arrow-left.me-2
+        | Volver

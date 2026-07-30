@@ -1,0 +1,68 @@
+extends ../HomeUsuario
+
+block content
+
+    .container.mt-4
+
+        h3.mb-3
+            i.fa-solid.fa-heart.text-danger
+            |  Mis Favoritos
+
+        .mb-3
+
+            button.btn.btn-success.me-2(
+                data-bs-toggle="modal"
+                data-bs-target="#modalColeccion"
+            )
+                i.fa-solid.fa-folder-plus
+                |  Nueva colección
+
+            a.btn.btn-primary(href="/colecciones")
+                i.fa-solid.fa-folder-open
+                |  Mis colecciones
+
+        if favoritos.length==0
+
+            .alert.alert-warning
+                | Todavía no tienes publicaciones favoritas.
+
+        else
+
+            .row
+
+                each favorito in favoritos
+
+                    .col-md-4.mb-4
+
+                        .card.shadow
+
+                            img.card-img-top(
+                                src="/imagenes/#{favorito.Publicacion.Imagens[0].nombreArchivo}"
+                                style="height:220px;object-fit:cover"
+                            )
+
+                            .card-body
+
+                                h5.card-title=favorito.Publicacion.titulo
+
+                                if favorito.Publicacion.descripcion
+
+                                    p.card-text=favorito.Publicacion.descripcion
+
+                                .d-flex.justify-content-between
+
+                                    a.btn.btn-outline-primary(
+                                        href="/publicacion/"+favorito.idPublicacion
+                                    )
+                                        i.fa-solid.fa-eye
+
+                                    button.btn.btn-outline-success(
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalAgregar#{favorito.id}"
+                                    )
+                                        i.fa-solid.fa-folder-plus
+
+                                    a.btn.btn-outline-danger(
+                                        href="/favoritos/eliminar/"+favorito.id
+                                    )
+                                        i.fa-solid.fa-trash

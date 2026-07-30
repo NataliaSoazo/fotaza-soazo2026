@@ -1,0 +1,40 @@
+extends ../Usuario/modoValidador
+
+block content
+  .row
+    .col-2
+    .col-8
+      .card.shadow.p-4
+        h5.text-center.mb-3 PUBLICACIONES DADAS DE BAJA
+
+        if pBajadas && pBajadas.length > 0
+          table.table.table-warning#table
+            thead
+              tr
+                th.text-center ID PUBLICACION
+                th.text-center titulo
+                th.text-center NICK DEL USUARIO
+                th.text-center ENLACE
+            tbody
+              each publicacion in pBajadas
+                tr
+                  td.text-center #{publicacion.id}
+                  td.text-center #{publicacion.titulo.toUpperCase()}
+                  td.text-center #{publicacion.Usuario.nick}
+                  td.text-center
+                    a(href=`/vertodaPublicacion2/${publicacion.id}`)
+                      i.fa.fa-eye(
+                        title="VER TODAS LAS IMÁGENES DE ESTA PUBLICACIÓN"
+                        style="font-size:25px; color:black;")
+                    a(href=`/verPerfil/${publicacion.idUsuario}`)
+                      i.fa.fa-user.p-2(
+                        title="VER PERFIL"
+                        style="font-size:25px; color:red;")
+
+        else
+          p.text-center No se encontraron imágenes con mas de 3 denuncias.
+  .row.justify-content-center.mt-4
+    .col-md-5.text-center
+      a.btn.btn-outline-primary(href="javascript:history.back()")
+        i.fa.fa-arrow-left.me-2
+        | Volver

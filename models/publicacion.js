@@ -32,7 +32,7 @@ import { EtiquetaPublicacion } from './etiquetaPublicacion.js';
           allowNull:true,
           defaultValue: false
     },
-     denunciada:{
+    bajada:{
           type:DataTypes.BOOLEAN,
           allowNull:true,
           defaultValue: false

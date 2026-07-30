@@ -25,6 +25,8 @@ block content
                       i.fa.fa-cart-shopping(title="ME INTERESA" style="font-size:30px; color: green;")  
                 a.mx-2(href="#" onclick=`Denunciar('${imagen.id}')`)
                   i.fa.fa-exclamation-triangle(title="DENUNCIAR" style="font-size:25px; color: red;")
+                a.mx-2(href=`/favoritos/agregar/${imagen.id}`)
+                  i.fa-solid.fa-heart(title="AGREGAR A FAVORITOS" style="font-size:25px; color: pinck;")
           .col-md-4
     .col-4
       h3.text-center INFORMACION DE LA IMAGEN
@@ -62,6 +64,7 @@ block content
                           h6.card-title.border.b=  comentario.Usuario.nick
                             p.card-text= comentario.texto
                             small.text-muted.border= comentario.fecha.toLocaleString()
+                if usuario.id == user.id
                   a.btn.btn-outline-danger(
                     href="javascript:history.back()"
                   )

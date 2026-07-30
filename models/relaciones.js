@@ -8,6 +8,8 @@ import { Denuncia } from './denuncia.js';
 import { Comenta } from './comenta.js';
 import { Sigue } from './Sigue.js';
 import { Notificacion } from './notificacion.js';
+import { Coleccion } from './coleccion.js';
+import { Favorito } from './favorito.js';
 
 Usuario.hasMany(Publicacion,{
  foreignKey:'idUsuario'
@@ -65,14 +67,16 @@ foreignKey:'idUsuario'
 Denuncia.belongsTo(Usuario,{
 foreignKey:'idUsuario'
 });
-
+// uma imagen puede tener muchas denuncias
 Imagen.hasMany(Denuncia,{
 foreignKey:'idImagen'
 });
-
+//una denucnia tiene una sola imagen receptora
 Denuncia.belongsTo(Imagen,{
 foreignKey:'idImagen'
 });
+Imagen.hasMany(Denuncia, { foreignKey: "idImagen" });
+Denuncia.belongsTo(Imagen, { foreignKey: "idImagen" });
 
 
 
@@ -110,3 +114,19 @@ Notificacion.belongsTo(Usuario,{foreignKey:'idUsuarioReceptor', as:'receptor' })
 Usuario.hasMany(Notificacion, {foreignKey: 'idUsuarioEmisor', as:'notificante'});
 //un usuario puede recibir muchas notificaciones.
 Usuario.hasMany(Notificacion,{foreignKey: 'idUsuarioReceptor', as: 'notificado' });
+
+Usuario.hasMany(Coleccion,{
+    foreignKey:"idUsuario"
+});
+
+Coleccion.belongsTo(Usuario,{
+    foreignKey:"idUsuario"
+});
+
+Coleccion.hasMany(Favorito,{
+    foreignKey:"idColeccion"
+});
+
+Favorito.belongsTo(Coleccion,{
+    foreignKey:"idColeccion"
+});
