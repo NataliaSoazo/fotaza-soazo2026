@@ -3,6 +3,9 @@ extends ../Usuario/modoValidador
 block content
   .row
     .col-2
+      if mensaje
+        .alert.alert-success.mt-3
+          = mensaje
     .col-8
       .card.shadow.p-4
         h5.text-center.mb-3 PUBLICACIONES DADAS DE BAJA

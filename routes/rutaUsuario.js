@@ -205,7 +205,7 @@ router.get('/miPerfil', async(req ,res)=>{
       }
     const sigo = await Sigue.count({where:{idSeguidor: user.id}});
     const meSiguen = await Sigue.count({where: {idSeguido: user.id}});
-    const u = await  Usuario.count(user.id);
+    const u = await  Usuario.findByPk(user.id);
     res.render('Usuario/miperfil', {u, sigo,meSiguen});
   } catch (error) {
     console.log(error)

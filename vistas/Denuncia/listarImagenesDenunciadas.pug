@@ -3,6 +3,9 @@ extends ../Usuario/modoValidador
 block content
   .row
     .col-2
+      if mensaje
+        .alert.alert-success.mt-3
+          = mensaje
     .col-8
       .card.shadow.p-4
         h5.text-center.mb-3 IMÁGENES DENUNCIADAS
@@ -28,10 +31,6 @@ block content
                       i.fa.fa-eye(
                         title="VER TODAS LAS IMÁGENES DE ESTA PUBLICACIÓN"
                         style="font-size:25px; color:black;")
-                    a(href=`/vertodaPublicacion2/${imagen.id}`)
-                      i.fa.fa-trash.p-2(
-                        title="ELIMINAR IMAGEN"
-                        style="font-size:25px; color:red;")
                     a(href=`/darDeBaja/${imagen.idPublicacion}`)
                       i.fa.fa-arrow-down(
                           title="DAR LA BAJA A TODA LA PUBLICACION"
