@@ -103,4 +103,28 @@ router.get('/darDeBaja/:id', async (req, res) => {
             res.status(500).send(error);
     }
 })
+router.get('/usuariosDesactivados', async (req, res) => {
+    try {
+        const user = req.session.user;
+
+        if (!user) {
+            return res.redirect('/');
+        }
+        const usuario = await Usuario.findByPk(user.id);
+        if (usuario.tipoUsuario !== 'Validador') {
+            req.session.mensaje = "No tienes permisos para ver esta información.";
+            return res.redirect('/HomeUsuario');
+        }
+
+        const usuariosAnulados = await Usuario.findAll({
+            where: { anulado: true }
+        });
+
+        res.render('Denuncia/usuariosAnulados', { usuariosAnulados, user });
+
+    } catch (error) {
+          console.log(error);
+            res.status(500).send(error);
+    }
+})
 export default router;

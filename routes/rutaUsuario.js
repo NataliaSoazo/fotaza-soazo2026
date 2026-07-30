@@ -132,8 +132,15 @@ router.get('/HomeUsuario',async(req , res)=>{
     const cantNotif = await Notificacion.count({where:{idUsuarioReceptor:user.id, leido: false }, order: [["createdAt", "DESC"]],
     limit: 10});
     const etiquetas = await Etiqueta.findAll();
-    const imagenes = await Imagen.findAll({
-
+      const imagenes = await Imagen.findAll({
+    include: [
+        {
+            model: Publicacion,
+            where: {
+                bajada: false
+            }
+        }
+    ],
     attributes: {
         include: [
             [
@@ -142,12 +149,12 @@ router.get('/HomeUsuario',async(req , res)=>{
                     FROM votos v
                     WHERE v.idImagen = Imagen.id
                 )`),
-                'cantidadVotos'
+                "cantidadVotos"
             ]
         ]
     },
-    order: [[sequelizeFotaza.literal('cantidadVotos'), 'DESC']]
-    });
+    order: [[sequelizeFotaza.literal("cantidadVotos"), "DESC"]]
+});
     res.render('Usuario/verTodos', {user, imagenes, etiquetas, notif, cantNotif})
    } catch (error) {
     console.log(error);

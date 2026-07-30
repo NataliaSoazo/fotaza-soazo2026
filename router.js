@@ -61,7 +61,17 @@ app.get('/', async (req, res) => {
     }]
     });
     const imagenes = await Imagen.findAll({
-    where: { licencia: 'Default' },
+    where: {
+        licencia: 'Default'
+    },
+    include: [
+        {
+            model: Publicacion,
+            where: {
+                bajada: false
+            }
+        }
+    ],
     attributes: {
         include: [
             [
@@ -75,7 +85,7 @@ app.get('/', async (req, res) => {
         ]
     },
     order: [[sequelizeFotaza.literal('cantidadVotos'), 'DESC']]
-    });
+});
     res.render('Home/inicio',{etiquetas, imagenes});
 });
 
